@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from IPython.display import clear_output
 
+import RLMicrobot.microrobotmodel.MicroRobotModel as MicroRobotModel
+
 
 #@title
 def cart2pol(x, y):
