@@ -10,8 +10,8 @@ Original file is located at
 import numpy as np
 import gym
 from gym import spaces
-import RLMicrobot.microrobotmodel as MicroRobotModel
-import RLMicrobot.magneticfieldsim as MagneticFieldSim
+from RLMicrobot.microrobotmodel import MicroRobotModel
+from RLMicrobot.magneticfieldsim import MagneticFieldSim
 from IPython import display
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
