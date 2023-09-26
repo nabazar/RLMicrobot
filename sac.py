@@ -19,7 +19,7 @@ import torch.optim as optim
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.distributions import Normal
-
+import numpy as np
 class Critic(nn.Module):
     def __init__(self, beta, state_dims, action_dims, fc1_dims, fc2_dims,fc3_dims, name='Critic', ckpt_dir='tmp'):
         super(Critic, self).__init__()
