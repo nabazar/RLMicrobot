@@ -17,8 +17,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from IPython.display import clear_output
 from RLMicrobot import *
-import RLMicrobot.microrobotmodel.MicroRobotModel as MicroRobotModel
-import RLMicrobot.microrobotmodel.magneticfieldsim as MagneticFieldSim
+import microrobotmodel as MicroRobotModel
+import microrobotmodel as MagneticFieldSim
 
 #@title
 def cart2pol(x, y):
