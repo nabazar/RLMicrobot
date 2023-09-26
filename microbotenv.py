@@ -16,7 +16,7 @@ from IPython import display
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from IPython.display import clear_output
-
+from RLMicrobot import *
 import RLMicrobot.microrobotmodel.MicroRobotModel as MicroRobotModel
 import RLMicrobot.microrobotmodel.magneticfieldsim as MagneticFieldSim
 
