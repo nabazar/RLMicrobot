@@ -10,15 +10,14 @@ Original file is located at
 import numpy as np
 import gym
 from gym import spaces
-# from RLMicrobot.microrobotmodel import MicroRobotModel
-# from RLMicrobot.magneticfieldsim import MagneticFieldSim
+from RLMicrobot.microrobotmodel import MicroRobotModel
+from RLMicrobot.magneticfieldsim import MagneticFieldSim
 from IPython import display
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 from IPython.display import clear_output
 from RLMicrobot import *
-import microrobotmodel as MicroRobotModel
-import microrobotmodel as MagneticFieldSim
+
 
 #@title
 def cart2pol(x, y):
