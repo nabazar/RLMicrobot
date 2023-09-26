@@ -127,7 +127,7 @@ class Microrobot_Env():
     Ix=action[0]
     Iy=action[1]
     Iz=action[2]
-    # theta_dot = 1.25*freq*M_z*(M_y*sin(phi_y)*sin(th-pi/2)+ M_x*sin(phi_x)*sin(th))
+    # theta_dot = 1.25*freq*M_z*(M_y*sin(phi_y)*sin(th-np.pi/2)+ M_x*sin(phi_x)*sin(th))
 
     I=[Ix,Iy,Iz,-Ix,-Iy,-Iz]
     self.info=I
@@ -155,10 +155,10 @@ class Microrobot_Env():
     a=np.sqrt(dx**2+dy**2)
     [new_r,new_theta]=cart2pol(x,y)
     c=new_r
-    if theta>=2*pi:
-      new_theta=new_theta-2*pi
+    if theta>=2*np.pi:
+      new_theta=new_theta-2*np.pi
     if new_theta<0:
-      new_theta=new_theta+2*pi
+      new_theta=new_theta+2*np.pi
     # delth=math.acos((b**2+c**2-a**2)/(2*b*c))
     deltheta=np.rad2deg(new_theta-theta)
     theta=new_theta
