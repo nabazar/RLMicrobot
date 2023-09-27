@@ -30,6 +30,17 @@ def pol2cart(rho, phi):
     y = rho * np.sin(phi)
     return(x, y)
 
+#@title
+def rotationmatrix(thx,thy,thz):
+
+  Rotx=np.array([[1, 0, 0,0],[0 ,np.cos(thx), -np.sin(thx),0],[0 ,np.sin(thx), np.cos(thx),0],[0,0,0,1]])
+  Roty=np.array([[np.cos(thy) ,0 ,np.sin(thy),0],[0 ,1 ,0,0],[-np.sin(thy), 0, np.cos(thy),0],[0,0,0,1]])
+  Rotz=np.array([[np.cos(thz) ,-np.sin(thz), 0,0],[np.sin(thz), np.cos(thz) ,0,0],[0, 0, 1,0],[0,0,0,1]])
+  Rot=np.matmul(Rotz,Roty,Rotx)
+
+  return Rot
+
+
 class Microrobot_Env():
 
 
