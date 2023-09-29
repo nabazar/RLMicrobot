@@ -215,42 +215,16 @@ class Microrobot_Env():
       self.success = 0
       self.reward = -10
       self.done=2
-    #print(f'reward = {self.reward}')
-
-
-    # self.reward = -abs(self.goal-self.theta)
-    # if abs(self.goal - self.theta) > 300: #assume that theta is 359 and goal is 9, then the difference is 350
-    #     self.reward = -abs(self.goal+360-self.theta)
-
-    # '''if we have reached the goal give success reward and finish the episode'''
-    # if abs(self.goal-self.theta) < self.THETA_MARGIN:
-    #     self.reward += self.success_reward
-    #     self.success = 1
-    #     #print('SUCCESS!!!')
-    #     self.done = 1
-    # #print(f'reward = {self.reward}')
 
 
 
     self.r1=r1
     self.r2=r2
     self.P=P
-    # self.next_state=np.array(self.theta,dtype=np.float32)
-    # self.next_state=self.theta
-    # self.next_state=np.array((self.rm,np.deg2rad(self.theta)),dtype=np.float32)
 
-    # if abs(self.goal-self.theta) > 200:
-    #     self.next_state = (np.deg2rad(self.theta),
-    #                   np.deg2rad(self.goal+360-self.theta),
-    #                   np.deg2rad(delths))#,
-    #                   # (self.max_step-self.i_step)/self.max_step,
-    #                   # self.action_last[0],
-    #                   # self.action_last[1],
-    #                   # self.action_last[2])
-    # else:
-    #     #print('here making a state')
     self.next_state = (np.deg2rad(self.theta),
                   np.deg2rad(self.start),
+                  np.deg2rad(theta),                
                   np.deg2rad(deltheta),
                   np.deg2rad(delthg))#,
                   # (self.max_step-self.i_step)/self.max_step,
@@ -280,7 +254,8 @@ class Microrobot_Env():
     self.target_cart=[xt,yt,phit]
 
     self.state = (np.deg2rad(self.theta ),
-                  np.deg2rad(self.theta),
+                  0,
+                  0,
                   0,
                   self.goal_distance)#,
                   #  1,
@@ -309,13 +284,10 @@ class Microrobot_Env():
     self.target_cart=[xt,yt,phit]
 
     self.state = (np.deg2rad(self.theta ),
-                  np.deg2rad(self.theta),
+                  0,
+                  0,
                   0,
                   self.goal_distance)#,
-                  #  1,
-                  # self.action_last[0],
-                  # self.action_last[1],
-                  # self.action_last[2])
 
     return self.state, self.reward, self.done, self.target_cart
 
@@ -365,10 +337,10 @@ class Microrobot_Env():
 
   def render(self):
 
-    display.display(plt.gcf())
+    #display.display(plt.gcf())
     # display.clear_output(wait=0.005)
     # sleep(0.1)
-    plt.close()
+    # plt.close()
     self.EnvPlot()
 
 
