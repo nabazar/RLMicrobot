@@ -95,10 +95,10 @@ class Microrobot_Env():
     self.action_last = np.zeros((num_actions,))
 
     # self.action_space =np.array([[-1,-1, -1, -1], [1,1, 1, 1]])
-    # self.observation_space =np.array([0,0])
+    # self.observation_space =np.array([0])
     self.action = np.array(np.random.uniform(-1,1,num_actions))
     self.action_space = spaces.Box(low=-1, high=1, shape=(num_actions,), dtype=np.float32 )
-    self.observation_space = spaces.Box(low=0, high=2*np.pi,shape=(2,), dtype=np.float32)
+    self.observation_space = spaces.Box(low=0, high=2*np.pi,shape=(1,), dtype=np.float32)
     self.axs=0
     self.testmode=0
 
@@ -246,8 +246,7 @@ class Microrobot_Env():
     phit=0
     self.target_cart=[xt,yt,phit]
 
-    self.state = (np.deg2rad(self.theta ),
-                  0)#,
+    self.state = np.deg2rad(self.theta )
 
 
     return self.state, self.reward, self.done, self.target_cart
@@ -270,8 +269,7 @@ class Microrobot_Env():
     phit=0
     self.target_cart=[xt,yt,phit]
 
-    self.state = (np.deg2rad(self.theta ),
-                  0)#,
+    self.state = np.deg2rad(self.theta )#,
 
     return self.state, self.reward, self.done, self.target_cart
 
