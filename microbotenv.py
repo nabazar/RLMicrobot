@@ -166,10 +166,10 @@ class Microrobot_Env():
     a=np.sqrt(dx**2+dy**2)
     [new_r,new_theta]=cart2pol(x,y)
     c=new_r
-    if theta>=2*np.pi:
-      new_theta=new_theta-2*np.pi
-    if new_theta<0:
-      new_theta=new_theta+2*np.pi
+    # if theta>=2*np.pi:
+    #   new_theta=new_theta-2*np.pi
+    # if new_theta<0:
+    #   new_theta=new_theta+2*np.pi
     # delth=math.acos((b**2+c**2-a**2)/(2*b*c))
     deltheta=np.rad2deg(new_theta-theta)
     theta=new_theta
@@ -184,7 +184,7 @@ class Microrobot_Env():
     yt=self.target_cart[1]
     phit=self.target_cart[2]
     d_target=np.sqrt((xt-x)**2+(yt-y)**2)
-    self.theta = self.correct_for_wrap(self.theta)
+    # self.theta = self.correct_for_wrap(self.theta)
     #print(f'theta_dot: {self.theta_dot}')
 
 
@@ -223,13 +223,7 @@ class Microrobot_Env():
     self.P=P
 
     self.next_state = (np.deg2rad(self.theta),
-                  np.deg2rad(self.start),    
-                  np.deg2rad(deltheta),
-                  np.deg2rad(delthg))#,
-                  # (self.max_step-self.i_step)/self.max_step,
-                  # self.action_last[0],
-                  # self.action_last[1],
-                  # self.action_last[2])
+                  np.deg2rad(self.start))#,
     self.action_last = action
     return self.next_state, self.reward, self.done ,self.microbot, self.info
 
@@ -253,13 +247,8 @@ class Microrobot_Env():
     self.target_cart=[xt,yt,phit]
 
     self.state = (np.deg2rad(self.theta ),
-                  0,
-                  0,
-                  self.goal_distance)#,
-                  #  1,
-                  # self.action_last[0],
-                  # self.action_last[1],
-                  # self.action_last[2])
+                  0)#,
+
 
     return self.state, self.reward, self.done, self.target_cart
   def resetForTest(self):
@@ -282,10 +271,7 @@ class Microrobot_Env():
     self.target_cart=[xt,yt,phit]
 
     self.state = (np.deg2rad(self.theta ),
-                  0,
-                  0,
-                  0,
-                  self.goal_distance)#,
+                  0)#,
 
     return self.state, self.reward, self.done, self.target_cart
 
