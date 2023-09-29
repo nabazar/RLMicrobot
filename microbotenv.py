@@ -119,13 +119,13 @@ class Microrobot_Env():
 
     t=self.time
 
-    # M_x = action[0]
-    # M_y= action[1]
+    # M_x = action[0][0]
+    # M_y= action[0][1]
     # M_z = max(abs(M_x), abs(M_y))
     # # M_z=action[2]
     # freq = self.freq
-    # phi_x = action[2]
-    # phi_y = action[3]
+    # phi_x = action[0][2]
+    # phi_y = action[0][3]
 
     # thx=freq*t + phi_x*np.pi
     # thy=freq*t + phi_y*np.pi
@@ -135,9 +135,9 @@ class Microrobot_Env():
     # Ix = M_x*np.sin(thx)#Current in X-axis coil I
     # Iy = M_y*np.sin(thy)#Current in Y-axis coil I
     # Iz = M_z*np.sin(thz)#Current in Z-axis coil I
-    Ix=action[0]
-    Iy=action[1]
-    Iz=action[2]
+    Ix=action[0][0]
+    Iy=action[0][1]
+    Iz=action[0][2]
     # theta_dot = 1.25*freq*M_z*(M_y*sin(phi_y)*sin(th-np.pi/2)+ M_x*sin(phi_x)*sin(th))
 
     I=[Ix,Iy,Iz,-Ix,-Iy,-Iz]
