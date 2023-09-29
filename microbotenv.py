@@ -106,8 +106,8 @@ class Microrobot_Env():
 
   def step(self, action):
 
-    x=self.rm*np.cos(self.state[0])
-    y=self.rm*np.sin(self.state[0])
+    x=self.rm*np.cos(self.state)
+    y=self.rm*np.sin(self.state)
     phi=0
 
     z=0
@@ -142,7 +142,7 @@ class Microrobot_Env():
 
     I=[Ix,Iy,Iz,-Ix,-Iy,-Iz]
     self.info=I
-    theta=self.state[0]
+    theta=self.state
     P=np.array([rm*np.cos(theta),rm*np.sin(theta),0,1])
     self.P=P
     mag=MagneticFieldSim(P,I)
