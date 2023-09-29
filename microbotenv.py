@@ -222,8 +222,7 @@ class Microrobot_Env():
     self.r2=r2
     self.P=P
 
-    self.next_state = (np.deg2rad(self.theta),
-                  np.deg2rad(self.start))#,
+    self.next_state =np.deg2rad(self.theta)#,
     self.action_last = action
     return self.next_state, self.reward, self.done ,self.microbot, self.info
 
@@ -259,7 +258,7 @@ class Microrobot_Env():
     # phi=random.uniform(0, 2*np.pi)
     self.theta = 3
 
-    self.goal = self.theta + self.goal_distance-3
+    self.goal = self.theta + self.goal_distance
     # self.goal = self.correct_for_wrap(self.goal)
     # self.state=np.array((r,th,phi),dtype=np.float32)
     # self.state=np.array((r,self.theta),dtype=np.float32)
