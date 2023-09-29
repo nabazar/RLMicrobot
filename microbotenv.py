@@ -223,8 +223,7 @@ class Microrobot_Env():
     self.P=P
 
     self.next_state = (np.deg2rad(self.theta),
-                  np.deg2rad(self.start),
-                  np.deg2rad(theta),                
+                  np.deg2rad(self.start),    
                   np.deg2rad(deltheta),
                   np.deg2rad(delthg))#,
                   # (self.max_step-self.i_step)/self.max_step,
@@ -254,7 +253,6 @@ class Microrobot_Env():
     self.target_cart=[xt,yt,phit]
 
     self.state = (np.deg2rad(self.theta ),
-                  0,
                   0,
                   0,
                   self.goal_distance)#,
