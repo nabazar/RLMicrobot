@@ -188,7 +188,7 @@ class Microrobot_Env():
     #print(f'theta_dot: {self.theta_dot}')
 
 
-    delthg=self.goal-self.theta
+    # delthg=self.goal-self.theta
     # self.reward = -abs(np.deg2rad(self.goal-self.theta))
     # if abs(self.goal - self.theta) > 300: #assume that theta is 359 and goal is 9, then the difference is 350
     #     self.reward = -abs(np.deg2rad(self.goal+360-self.theta))
@@ -216,13 +216,13 @@ class Microrobot_Env():
     #   # self.success = 0
     #   # self.reward = -10
     #   self.done=2
-    self.reward = -abs(np.deg2rad(deltheta))
-    if deltheta**2<0.1:
+    self.reward = -np.deg2rad(3-deltheta)**2
+    if np.deg2rad(3-deltheta)**2<0.5 :
         self.reward =self.reward = +10
         self.done=1
     else:
         self.done=0
-        
+
 
 
     self.r1=r1
