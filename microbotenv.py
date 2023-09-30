@@ -199,7 +199,7 @@ class Microrobot_Env():
     delths=self.theta-self.start
     if self.theta<=self.goal and self.theta>=self.start   and deltheta>0   :
       if  self.goal-self.theta <=3 :
-        # self.reward+= 10
+        self.reward+= 10
         # self.success = 1
         #print('SUCCESS!!!')
         self.theta=self.goal
