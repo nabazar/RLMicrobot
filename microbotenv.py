@@ -196,8 +196,8 @@ class Microrobot_Env():
     '''if we have reached the goal give success reward and finish the episode'''
     # self.start=self.goal-self.goal_distance
     self.start=self.state
-    delths=self.theta-self.start
-    # if self.theta<=self.goal+0.1 and self.theta>=self.start   and deltheta>0   :
+    delths=theta-self.start
+    # if self.theta<=self.goal+0.33 and self.theta>=self.start   and deltheta>0   :
     #   if  abs(self.goal-self.theta) <=0.1 :
     #     self.reward+= 10
     #     # self.success = 1
@@ -208,7 +208,7 @@ class Microrobot_Env():
     #     # self.reward+= -(np.deg2rad(deltheta-5)/(np.pi))**2
     #     self.done = 0
 
-    # elif self.theta<=self.goal and self.theta>=self.start   and deltheta<=0   :
+    # elif self.theta<=self.goal and theta>=self.start   and deltheta<=0   :
     #   # self.success = 0
     #   # self.reward+=-2
     #   self.done=3
@@ -217,7 +217,7 @@ class Microrobot_Env():
     #   # self.reward = -10
     #   self.done=2
     self.reward = -np.deg2rad(3-deltheta)**2
-    if np.deg2rad(3-deltheta)**2<0.1:
+    if np.deg2rad(3-deltheta)**2<0.1 and deltheta>0:
         self.reward =self.reward +10
         self.done=1
     else:
