@@ -171,7 +171,11 @@ class Microrobot_Env():
     # if new_theta<0:
     #   new_theta=new_theta+2*np.pi
     # delth=math.acos((b**2+c**2-a**2)/(2*b*c))
-    deltheta=np.rad2deg(new_theta-theta)
+
+      
+    deltheta=np.rad2deg(new_theta-theta)    
+    if np.rad2deg(theta)>357 and new_theta<3 and new_theta>=0:
+        deltheta=abs(deltheta)
     theta=new_theta
 
     self.microbot.phi=0
@@ -217,7 +221,7 @@ class Microrobot_Env():
     #   # self.reward = -10
     #   self.done=2
     self.reward = -np.deg2rad(3-deltheta)**2
-    if np.deg2rad(3-deltheta)**2<0.1 and deltheta>0:
+    if np.deg2rad(3-deltheta)**2<2.5e-5 and deltheta>0:
         self.reward =self.reward +10
         self.done=1
     else:
