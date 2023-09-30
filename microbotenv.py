@@ -174,7 +174,7 @@ class Microrobot_Env():
 
       
     deltheta=np.rad2deg(new_theta-theta)    
-    if np.rad2deg(theta)>357 and new_theta<3 and new_theta>=0:
+    if np.rad2deg(theta)>357 and new_theta<np.rad2deg(3) and new_theta>=0:
         deltheta=abs(deltheta)
     theta=new_theta
 
