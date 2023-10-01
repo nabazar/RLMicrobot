@@ -20,7 +20,7 @@ class MicroRobotModel():
     self.ph=self.Lh/(self.nh*2*np.pi)
     self.etah=2.5*1e-3 # fluid(blood) viscosity
     self.ah=0.05*1e-3  # filament radius
-    self.mh=3e-2 # microrobot moment
+    self.mh=6e-2 # microrobot moment
     self.B=B
     self.J=J
     self.th=th
