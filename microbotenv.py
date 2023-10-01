@@ -350,10 +350,10 @@ class Microrobot_Env():
 
       return angle
   def correct_for_wrap_rad(self, angle):
-      if angle > 2*pi:
-          angle -=2*pi
+      if angle > 2*np.pi:
+          angle -=2*np.pi
 
       if angle < 0:
-          angle +=2*pi
+          angle +=2*np.pi
 
       return angle
