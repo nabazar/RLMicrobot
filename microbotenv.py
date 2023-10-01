@@ -106,7 +106,7 @@ class Microrobot_Env():
 
 
   def step(self, action):
-    self.state=self.correct_for_wrap_rad(self, self.state)
+    self.state=self.correct_for_wrap_rad(self.state)
     x=self.rm*np.cos(self.state)
     y=self.rm*np.sin(self.state)
     phi=0
@@ -166,7 +166,7 @@ class Microrobot_Env():
     y=y+dy
     a=np.sqrt(dx**2+dy**2)
     [new_r,new_theta]=cart2pol(x,y)
-    new_theta=self.correct_for_wrap_rad(self, new_theta)
+    new_theta=self.correct_for_wrap_rad(new_theta)
     c=new_r
     # if theta>=2*np.pi:
     #   new_theta=new_theta-2*np.pi
@@ -176,11 +176,11 @@ class Microrobot_Env():
 
       
     deltheta=np.rad2deg(new_theta-theta)   
-    deltheta=self.correct_for_wrap_deg(self, deltheta) 
+    deltheta=self.correct_for_wrap_deg( deltheta) 
     if np.rad2deg(theta)>357 and new_theta<np.rad2deg(3) and new_theta>=0:
         deltheta=abs(deltheta)
     theta=new_theta
-    theta=self.correct_for_wrap_rad(self, theta) 
+    theta=self.correct_for_wrap_rad(theta) 
 
     self.microbot.phi=0
     P=np.array([rm*np.cos(theta),rm*np.sin(theta),0,1])
@@ -225,7 +225,7 @@ class Microrobot_Env():
     #   # self.reward = -10
     #   self.done=2
     D=5-deltheta
-    D=self.correct_for_wrap_deg(self, D) 
+    D=self.correct_for_wrap_deg(D) 
     self.reward = -D**2
     self.reward =0.001*self.reward
     if abs(D)<1 and np.deg2rad(deltheta)>0:
