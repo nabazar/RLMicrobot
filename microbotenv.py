@@ -224,9 +224,10 @@ class Microrobot_Env():
     self.reward = -D**2
     self.reward =0.001*self.reward
     if abs(D)<0.25 and np.deg2rad(deltheta)>0:
-        self.reward =self.reward +100
+        self.reward = +10
         self.done=1
     else:
+        self.reward =-10
         self.done=0
 
 
