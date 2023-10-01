@@ -44,7 +44,7 @@ def rotationmatrix(thx,thy,thz):
 class Microrobot_Env():
 
 
-  def __init__(self, state_size, num_actions):
+  def __init__(self):
 
     self.done = 0
     self.reward = 0
@@ -91,6 +91,7 @@ class Microrobot_Env():
     self.target_cart=[xt,yt,phit]
     self.path=[0,0,0]
     self.step_rate=1
+    num_actions=4
     self.num_actions=num_actions
     self.action_last = np.zeros((num_actions,))
 
