@@ -227,7 +227,7 @@ class Microrobot_Env():
         self.reward = self.reward +10
         self.done=1
     else:
-        # self.reward =-10
+        # self.reward =-2
         self.done=0
 
 
