@@ -91,7 +91,7 @@ class Microrobot_Env():
     self.target_cart=[xt,yt,phit]
     self.path=[0,0,0]
     self.step_rate=1
-    num_actions=4
+    num_actions=3
     self.num_actions=num_actions
     self.action_last = np.zeros((num_actions,))
 
