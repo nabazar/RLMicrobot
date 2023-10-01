@@ -62,7 +62,7 @@ class Microrobot_Env():
 
     self.theta = 0
     self.theta_dot = 0
-    self.goal_distance = 5
+    self.goal_distance = 3
     self.goal = self.theta + self.goal_distance
     self.target_direction = 1
     self.success_reward = 100
@@ -220,9 +220,9 @@ class Microrobot_Env():
     #   # self.success = 0
     #   # self.reward = -10
     #   self.done=2
-    D=5-deltheta
+    D=3-deltheta
     self.reward = -D**2
-    self.reward =0.001*self.reward
+    self.reward =0.0001*self.reward
     if abs(D)<1 and np.deg2rad(deltheta)>0:
         self.reward = self.reward +10
         self.done=1
