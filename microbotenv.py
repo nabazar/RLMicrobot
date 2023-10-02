@@ -105,6 +105,8 @@ class Microrobot_Env():
     self.axs=0
     self.testmode=0
   def step(self, action):
+    self.goal = self.start + self.goal_distance
+    self.goal=self.correct_for_wrap_rad(self.goal)
     self.state=self.correct_for_wrap_rad(self.state)
     x=self.rm*np.cos(self.state)
     y=self.rm*np.sin(self.state)
@@ -160,7 +162,7 @@ class Microrobot_Env():
     self.microbot.phi=0
     P=np.array([rm*np.cos(self.theta),rm*np.sin(self.theta),0,1])
     self.microbot.P=P
-    self.microbot.th=theta
+    self.microbot.th=self.theta
 
     xt=self.target_cart[0]
     yt=self.target_cart[1]
@@ -169,7 +171,7 @@ class Microrobot_Env():
 
 
     self.reward = -dltg**2
-    self.reward =0.005*self.reward
+    self.reward =0.001*self.reward
     if abs(dltg)<0.3 and deltheta>0:
         self.reward = self.reward +10
         self.done=1
