@@ -152,17 +152,17 @@ class Microrobot_Env():
     new_theta=self.correct_for_wrap_rad(new_theta)
     deltheta=new_theta-self.theta
     deltheta=self.correct_for_wrap_rad(deltheta)
-    self.theta=new_theta
+
     c=new_r
-    dltg=np.rad2deg(self.goal-self.theta)
+    dltg=np.rad2deg(self.goal-new_theta)
     dltg=self.correct_for_wrap_deg(dltg)
     if self.start>self.goal :
         dltg=abs(dltg)
     
     self.microbot.phi=0
-    P=np.array([rm*np.cos(self.theta),rm*np.sin(self.theta),0,1])
+    P=np.array([rm*np.cos(new_theta),rm*np.sin(new_theta),0,1])
     self.microbot.P=P
-    self.microbot.th=self.theta
+    self.microbot.th=new_theta
 
     xt=self.target_cart[0]
     yt=self.target_cart[1]
@@ -172,7 +172,7 @@ class Microrobot_Env():
 
     self.reward = -dltg**2
     self.reward =0.001*self.reward
-    if abs(dltg)<0.3 and deltheta>0:
+    if abs(dltg)<0.6 and deltheta>0:
         self.reward = self.reward +10
         self.done=1
     else:
@@ -181,8 +181,8 @@ class Microrobot_Env():
     self.r1=r1
     self.r2=r2
     self.P=P
-
-    self.next_state =self.theta
+    self.theta =new_theta
+    self.next_state =new_theta
     return self.next_state, self.reward, self.done ,self.microbot, self.info
 
   def reset(self):
