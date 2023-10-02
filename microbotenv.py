@@ -228,7 +228,7 @@ class Microrobot_Env():
     D=self.correct_for_wrap_deg(D) 
     self.reward = -D**2
     self.reward =0.001*self.reward
-    if abs(D)<1 and np.deg2rad(deltheta)>0:
+    if abs(D)<1 and deltheta>0:
         self.reward = self.reward +100
         self.done=1
     else:
@@ -238,7 +238,7 @@ class Microrobot_Env():
     self.r2=r2
     self.P=P
 
-    self.next_state =np.deg2rad(self.theta)#,
+                    self.next_state =np.deg2rad(self.xe)#,
     self.action_last = action
     return self.next_state, self.reward, self.done ,self.microbot, self.info
 
