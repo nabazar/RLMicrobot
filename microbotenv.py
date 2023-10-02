@@ -59,7 +59,7 @@ class Microrobot_Env():
 
     self.state =[0,0,0,0,0,0]
     self.next_state =[0,0,0,0,0,0]
-
+    self.start =0
     self.theta = 0
     self.theta_dot = 0
     self.goal_distance =np.deg2rad( 5)
