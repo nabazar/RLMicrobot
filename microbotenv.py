@@ -152,8 +152,8 @@ class Microrobot_Env():
     deltheta=self.correct_for_wrap_rad(deltheta)
     self.theta=new_theta
     c=new_r
-    dltg=self.goal-self.theta
-    dltg=self.correct_for_wrap_rad(dltg)
+    dltg=np.rad2deg(self.goal-self.theta)
+    dltg=self.correct_for_wrap_deg(dltg)
     if self.start>self.goal :
         dltg=abs(dltg)
     
