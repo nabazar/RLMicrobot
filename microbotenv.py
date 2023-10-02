@@ -72,6 +72,7 @@ class Microrobot_Env():
     self.theta_last = 0
     self.THETA_MARGIN = 3
     self.abort = 0
+    self.start=0
 
 
     self.x=self.rm*np.cos(self.theta)
