@@ -62,8 +62,9 @@ class Microrobot_Env():
 
     self.theta = 0
     self.theta_dot = 0
-    self.goal_distance = 3
-    self.goal = self.theta + self.goal_distance
+    self.goal_distance =np.deg2rad( 5)
+    self.goal = self.start + self.goal_distance
+    self.goal=self.correct_for_wrap_rad(self.goal)
     self.target_direction = 1
     self.success_reward = 100
     self.theta_dot = 0
@@ -73,20 +74,20 @@ class Microrobot_Env():
     self.abort = 0
 
 
-    self.x=self.rm*np.cos(np.deg2rad(self.theta))
-    self.y=self.rm*np.sin(np.deg2rad(self.theta))
+    self.x=self.rm*np.cos(self.theta)
+    self.y=self.rm*np.sin(self.theta)
     # self.z=0
     self.Ph=0
     self.P=[self.x,self.y,0,1]
     self.microbot.B=[0,0,0]
     self.microbot.J=[[0,0,0],[0,0,0],[0,0,0]]
     self.microbot.P=self.P
-    self.microbot.th=np.deg2rad(self.theta)
+    self.microbot.th=self.theta
 
     self.time=0
     self.phi=0
     # self.target=np.array((self.rm*np.cos(self.goal),self.rm*np.sin(self.goal),0),dtype=np.float32)
-    [xt,yt]=pol2cart(self.rm,np.deg2rad(self.goal))
+    [xt,yt]=pol2cart(self.rm,self.goal)
     phit=0
     self.target_cart=[xt,yt,phit]
     self.path=[0,0,0]
@@ -102,15 +103,11 @@ class Microrobot_Env():
     self.observation_space = spaces.Box(low=0, high=2*np.pi,shape=(1,), dtype=np.float32)
     self.axs=0
     self.testmode=0
-
-
-
   def step(self, action):
     self.state=self.correct_for_wrap_rad(self.state)
     x=self.rm*np.cos(self.state)
     y=self.rm*np.sin(self.state)
     phi=0
-
     z=0
     rm=self.rm
     Rh=self.Rh
@@ -120,22 +117,6 @@ class Microrobot_Env():
 
     t=self.time
 
-    # M_x = action[0][0]
-    # M_y= action[0][1]
-    # M_z = max(abs(M_x), abs(M_y))
-    # # M_z=action[2]
-    # freq = self.freq
-    # phi_x = action[0][2]
-    # phi_y = action[0][3]
-
-    # thx=freq*t + phi_x*np.pi
-    # thy=freq*t + phi_y*np.pi
-    # thz=freq*t
-
-
-    # Ix = M_x*np.sin(thx)#Current in X-axis coil I
-    # Iy = M_y*np.sin(thy)#Current in Y-axis coil I
-    # Iz = M_z*np.sin(thz)#Current in Z-axis coil I
     Ix=action[0][0]
     Iy=action[0][1]
     Iz=action[0][2]
@@ -160,76 +141,36 @@ class Microrobot_Env():
     dx=v[0]*dt
     dy=v[1]*dt
     dphi=0*w[2]*dt
-
     b=np.sqrt(x**2+y**2)
     x=x+dx
     y=y+dy
     a=np.sqrt(dx**2+dy**2)
     [new_r,new_theta]=cart2pol(x,y)
     new_theta=self.correct_for_wrap_rad(new_theta)
+    deltheta=new_theta-self.theta
+    deltheta=self.correct_for_wrap_rad(deltheta)
+    self.theta=new_theta
     c=new_r
-    # if theta>=2*np.pi:
-    #   new_theta=new_theta-2*np.pi
-    # if new_theta<0:
-    #   new_theta=new_theta+2*np.pi
-    # delth=math.acos((b**2+c**2-a**2)/(2*b*c))
-
-      
-    deltheta=np.rad2deg(new_theta-theta)   
-    deltheta=self.correct_for_wrap_deg( deltheta) 
-    if np.rad2deg(theta)>357 and new_theta<np.rad2deg(3) and new_theta>=0:
-        deltheta=abs(deltheta)
-    theta=new_theta
-    theta=self.correct_for_wrap_rad(theta) 
-
+    dltg=self.goal-self.theta
+    dltg=self.correct_for_wrap_rad(dltg)
+    if self.start>self.goal :
+        dltg=abs(dltg)
+    
     self.microbot.phi=0
-    P=np.array([rm*np.cos(theta),rm*np.sin(theta),0,1])
+    P=np.array([rm*np.cos(self.theta),rm*np.sin(self.theta),0,1])
     self.microbot.P=P
     self.microbot.th=theta
 
-    self.theta=np.rad2deg(theta)
     xt=self.target_cart[0]
     yt=self.target_cart[1]
     phit=self.target_cart[2]
     d_target=np.sqrt((xt-x)**2+(yt-y)**2)
-    # self.theta = self.correct_for_wrap(self.theta)
-    #print(f'theta_dot: {self.theta_dot}')
 
 
-    # delthg=self.goal-self.theta
-    # self.reward = -abs(np.deg2rad(self.goal-self.theta))
-    # if abs(self.goal - self.theta) > 300: #assume that theta is 359 and goal is 9, then the difference is 350
-    #     self.reward = -abs(np.deg2rad(self.goal+360-self.theta))
-
-    '''if we have reached the goal give success reward and finish the episode'''
-    # self.start=self.goal-self.goal_distance
-    self.start=self.state
-    delths=theta-self.start
-    # if self.theta<=self.goal+0.33 and self.theta>=self.start   and deltheta>0   :
-    #   if  abs(self.goal-self.theta) <=0.1 :
-    #     self.reward+= 10
-    #     # self.success = 1
-    #     #print('SUCCESS!!!')
-    #     self.theta=self.goal
-    #     self.done = 1
-    #   else:
-    #     # self.reward+= -(np.deg2rad(deltheta-5)/(np.pi))**2
-    #     self.done = 0
-
-    # elif self.theta<=self.goal and theta>=self.start   and deltheta<=0   :
-    #   # self.success = 0
-    #   # self.reward+=-2
-    #   self.done=3
-    # else:
-    #   # self.success = 0
-    #   # self.reward = -10
-    #   self.done=2
-    D=5-deltheta
-    D=self.correct_for_wrap_deg(D) 
-    self.reward = -D**2
-    self.reward =0.001*self.reward
-    if abs(D)<1 and deltheta>0:
-        self.reward = self.reward +100
+    self.reward = -dltg**2
+    self.reward =0.0001*self.reward
+    if abs(dltg)<0.3 and deltheta>0:
+        self.reward = self.reward +10
         self.done=1
     else:
         # self.reward =-2
@@ -238,54 +179,34 @@ class Microrobot_Env():
     self.r2=r2
     self.P=P
 
-                    self.next_state =np.deg2rad(self.xe)#,
-    self.action_last = action
+    self.next_state =self.theta
     return self.next_state, self.reward, self.done ,self.microbot, self.info
 
   def reset(self):
     self.done = 0
     self.reward = 0
-    # th =random.uniform(0, 2*np.pi)
-    # r=random.uniform(self.r1, self.r2)
     r=self.rm
-    # phi=random.uniform(0, 2*np.pi)
-    self.theta = np.random.randint(0,359)
-
-    self.goal = self.theta + self.goal_distance
-    # self.goal = self.correct_for_wrap(self.goal)
-    # self.state=np.array((r,th,phi),dtype=np.float32)
-    # self.state=np.array((r,self.theta),dtype=np.float32)
-    # self.state=self.theta
-    self.action_last = np.zeros((self.num_actions,))
-    [xt,yt]=pol2cart(self.rm,np.deg2rad(self.goal))
+    self.start = np.random.randint(0,2*np.pi)
+    self.theta=self.start
+    self.goal = self.start + self.goal_distance
+    self.goal=self.correct_for_wrap_rad(self.goal)
+    [xt,yt]=pol2cart(self.rm,self.goal)
     phit=0
     self.target_cart=[xt,yt,phit]
-
-    self.state = np.deg2rad(self.theta )
-
-
+    self.state = self.theta 
     return self.state, self.reward, self.done, self.target_cart
   def resetForTest(self):
     self.done = 0
     self.reward = 0
-    # th =random.uniform(0, 2*np.pi)
-    # r=random.uniform(self.r1, self.r2)
     r=self.rm
-    # phi=random.uniform(0, 2*np.pi)
-    self.theta = 3
-
-    self.goal = self.theta + self.goal_distance
-    # self.goal = self.correct_for_wrap(self.goal)
-    # self.state=np.array((r,th,phi),dtype=np.float32)
-    # self.state=np.array((r,self.theta),dtype=np.float32)
-    # self.state=self.theta
-    self.action_last = np.zeros((self.num_actions,))
-    [xt,yt]=pol2cart(self.rm,np.deg2rad(self.goal))
+    self.start=0
+    self.goal = self.start + self.goal_distance
+    self.goal=self.correct_for_wrap_rad(self.goal)
+    self.theta = self.start
+    [xt,yt]=pol2cart(self.rm,self.goal)
     phit=0
     self.target_cart=[xt,yt,phit]
-
-    self.state = np.deg2rad(self.theta )#,
-
+    self.state = self.theta
     return self.state, self.reward, self.done, self.target_cart
 
 
