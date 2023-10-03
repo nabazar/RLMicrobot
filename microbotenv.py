@@ -258,10 +258,10 @@ class Microrobot_Env():
 
   def render(self):
 
-    #display.display(plt.gcf())
+    display.display(plt.gcf())
     # display.clear_output(wait=0.005)
     # sleep(0.1)
-    # plt.close()
+    plt.close()
     self.EnvPlot()
 
 
