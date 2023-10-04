@@ -21,8 +21,9 @@ class MicroRobotModel():
     self.etah=2.5*1e-3 # fluid(blood) viscosity
     self.ah=0.05*1e-3  # filament radius
     #self.mh=6e-2 # microrobot moment
-    V=np.pi*self.Rh**2*self.Lh #microrobot volume V
+    V=(4/3)*np.pi*self.b**3 #microrobot head volume V
     X=2e-2# https://journals.sagepub.com/doi/10.5772/58706
+    T=1
     mu0=4*np.pi*1e-7  #denotes the permeability of free space
     self.mh=V*T*(X/(mu0*(1+X)))*B # http://ras.papercept.net/images/temp/IROS/files/3114.pdf
     # where V denotes the volume of the microrobot, X is the susceptibility of the
@@ -74,8 +75,9 @@ class MicroRobotModel():
   def MicroRobotDyn(self):
     phi=self.phi
     
-    V=np.pi*self.Rh**2*self.Lh #microrobot volume V
+    V=(4/3)*np.pi*self.b**3 #microrobot head volume V
     X=2e-2# https://journals.sagepub.com/doi/10.5772/58706
+    T=1
     mu0=4*np.pi*1e-7  #denotes the permeability of free space
     self.mh=V*T*(X/(mu0*(1+X)))*B # http://ras.papercept.net/images/temp/IROS/files/3114.pdf
     # where V denotes the volume of the microrobot, X is the susceptibility of the
