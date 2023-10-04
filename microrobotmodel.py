@@ -23,6 +23,7 @@ class MicroRobotModel():
     #self.mh=6e-2 # microrobot moment
     V=(4/3)*np.pi*self.b**3 #microrobot head volume V
     X=2e-2# https://journals.sagepub.com/doi/10.5772/58706
+      # https://www.mdpi.com/2311-5521/5/1/19
     T=1
     mu0=4*np.pi*1e-7  #denotes the permeability of free space
     self.mh=V*T*(X/(mu0*(1+X)))*B # http://ras.papercept.net/images/temp/IROS/files/3114.pdf
