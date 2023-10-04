@@ -139,8 +139,7 @@ class Microrobot_Env():
     self.microbot.P=P
     self.microbot.th=theta
     [v,w,M]=self.microbot.MicroRobotDyn()
-    print(v,w)
-
+  
     dt=self.dt
     dx=v[0]*dt
     dy=v[1]*dt
@@ -171,8 +170,8 @@ class Microrobot_Env():
     d_target=np.sqrt((xt-x)**2+(yt-y)**2)
 
 
-    self.reward = -dltg**2
-    self.reward =0.001*self.reward
+    self.reward = -abs(dltg)
+    # self.reward =0.001*self.reward
     if abs(dltg)<1 and deltheta>0:
         self.reward = self.reward +100
         self.done=1
