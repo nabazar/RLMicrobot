@@ -83,7 +83,7 @@ class MicroRobotModel():
     self.mh=V*T*(X/(mu0*(1.0+X)))*self.B # http://ras.papercept.net/images/temp/IROS/files/3114.pdf
     # where V denotes the volume of the microrobot, X is the susceptibility of the
     # material, T is the ratio of magnetic material volume to the microrobot volume V
-    mh=self.mh
+    mh=1e6*self.mh
     ph=self.ph
     rm=self.rm
     B=self.B
