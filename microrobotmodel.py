@@ -80,7 +80,7 @@ class MicroRobotModel():
     X=2e-2# https://journals.sagepub.com/doi/10.5772/58706
     T=1.0
     mu0=4*np.pi*1e-7  #denotes the permeability of free space
-    self.mh=1e10*V*T*(X/(mu0*(1.0+X)))*self.B # http://ras.papercept.net/images/temp/IROS/files/3114.pdf
+    self.mh=1e8*V*T*(X/(mu0*(1.0+X)))*self.B # http://ras.papercept.net/images/temp/IROS/files/3114.pdf
     # where V denotes the volume of the microrobot, X is the susceptibility of the
     # material, T is the ratio of magnetic material volume to the microrobot volume V
     mh=self.mh
