@@ -73,14 +73,20 @@ class MicroRobotModel():
 #  subplot(2,2,1)
   def MicroRobotDyn(self):
     phi=self.phi
+    
+    X=2e-2# https://journals.sagepub.com/doi/10.5772/58706
+    mu0=4*np.pi*1e-7  #denotes the permeability of free space
+    self.mh=V*T*(X/(mu0*(1+X)))*self.B # http://ras.papercept.net/images/temp/IROS/files/3114.pdf
+    # where V denotes the volume of the microrobot, X is the susceptibility of the
+    # material, T is the ratio of magnetic material volume to the microrobot volume V
     mh=self.mh
     ph=self.ph
     rm=self.rm
     B=self.B
     J=self.J
 
-
-    M=np.array([mh*np.cos(phi) ,mh*np.sin(phi),0] ) #Microrobot magnetization
+    M=self.mh
+    # M=np.array([mh*np.cos(phi) ,mh*np.sin(phi),0] ) #Microrobot magnetization
     tow=np.cross(M,B)# torque implemented on the microrbot by the magnetic filed
     F=np.dot(M,J)# force implemented by magnetic field gradients on the microrobot
     H=self.helicalMatrix()
