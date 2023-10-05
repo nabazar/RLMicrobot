@@ -80,7 +80,7 @@ class MicroRobotModel():
     X=2e-2# https://journals.sagepub.com/doi/10.5772/58706
     T=1.0
     mu0=4*np.pi*1e-7  #denotes the permeability of free space
-    self.mh*V*T*(X/(mu0*(1.0+X)))*self.B # http://ras.papercept.net/images/temp/IROS/files/3114.pdf
+    self.mh=V*T*(X/(mu0*(1.0+X)))*self.B # http://ras.papercept.net/images/temp/IROS/files/3114.pdf
     # where V denotes the volume of the microrobot, X is the susceptibility of the
     # material, T is the ratio of magnetic material volume to the microrobot volume V
     mh=self.mh
@@ -91,11 +91,12 @@ class MicroRobotModel():
 
     M=self.mh
     # M=np.array([mh*np.cos(phi) ,mh*np.sin(phi),0] ) #Microrobot magnetization
-    tow=V*np.cross(M,B)# torque implemented on the microrbot by the magnetic filed
-    F=V*np.dot(M,J)# force implemented by magnetic field gradients on the microrobot
+    tow=np.cross(M,B)# torque implemented on the microrbot by the magnetic filed
+    F=np.dot(M,J)# force implemented by magnetic field gradients on the microrobot
     H=self.helicalMatrix()
     T=[F,tow]
     N=np.matmul(np.linalg.inv(H),T)
+    print(N)
     v=N[0,:]# micorobot translational velocity after implementing force and torque
     w=N[1,:]# micorobot angular velocity after implementing force and torque
     # phi=np.arctan2(v[1],v[0])
