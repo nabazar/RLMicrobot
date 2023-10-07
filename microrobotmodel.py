@@ -96,7 +96,7 @@ class MicroRobotModel():
     H=self.helicalMatrix()
     T=[F,tow]
     N=np.matmul(np.linalg.inv(H),T)
-    print(N)
+ 
     v=N[0,:]# micorobot translational velocity after implementing force and torque
     w=N[1,:]# micorobot angular velocity after implementing force and torque
     # phi=np.arctan2(v[1],v[0])
