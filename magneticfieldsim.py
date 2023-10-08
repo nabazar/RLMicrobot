@@ -19,11 +19,11 @@ class MagneticFieldSim():
     self.Lc=20e-3# length of any coil
     self.p=self.Lc/(2*self.ntpl*np.pi)
     self.nd=1000
-    self.Rc=2.5e-3 #radius of any coil
+    self.Rc=25e-3 #radius of any coil
     self.I=I
 
     ##Workspace Specifications
-    self.Lw=10e-3 #length,width and hight of the workspace
+    self.Lw=50e-3 #length,width and hight of the workspace
     self.C=np.array([[self.Lw/2,0,0],[0,self.Lw/2,0],[0,0,self.Lw/2],[-self.Lw/2,0,0],[0,-self.Lw/2,0],[0,0,-self.Lw/2]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
 
   def BiotSavar(self):
