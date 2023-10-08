@@ -78,7 +78,7 @@ class MicroRobotModel():
     
     V=(4/3)*np.pi*self.b**3 #microrobot head volume V
     X=2e-2# https://journals.sagepub.com/doi/10.5772/58706
-    T=5e8
+    T=1
     mu0=4*np.pi*1e-7  #denotes the permeability of free space
     self.mh=V*T*(X/(mu0*(1.0+X)))*self.B # http://ras.papercept.net/images/temp/IROS/files/3114.pdf
     # where V denotes the volume of the microrobot, X is the susceptibility of the
