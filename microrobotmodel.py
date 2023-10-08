@@ -32,8 +32,8 @@ class MicroRobotModel():
     self.B=B
     self.J=J
     self.th=th
-    self.r1 = 30*1e-3
-    self.r2 = 50*1e-3
+    self.r1 = 20*1e-3
+    self.r2 = 30*1e-3
     self.rm=(self.r1+self.r2)/2
     self.axs=0
     self.phi=np.pi/4
