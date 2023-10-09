@@ -50,6 +50,8 @@ class MagneticFieldSim():
     R=np.sqrt((x-xp)**2+(y-yp)**2+(z-zp)**2)
     if np.isnan(R):
         R=0
+    if R=0:
+        R=0.000001
     dBx=(mu0*I)/(4*np.pi)*((z-zp)*dy-(y-yp)*dz)/R**3
     dBy=-(mu0*I)/(4*np.pi)*((z-zp)*dx-(x-xp)*dz)/R**3
     dBz=(mu0*I)/(4*np.pi)*((x-xp)*dy-(y-yp)*dx)/R**3
