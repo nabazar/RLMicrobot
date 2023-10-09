@@ -38,6 +38,8 @@ class MicroRobotModel():
     self.axs=0
     self.phi=np.pi/4
     self.freq=0.8
+    print(B)
+    print(J)
 
 
   def spiralMicroRobot(self):
