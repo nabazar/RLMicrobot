@@ -51,6 +51,12 @@ class MagneticFieldSim():
     dBx=(mu0*I)/(4*np.pi)*((z-zp)*dy-(y-yp)*dz)/R**3
     dBy=-(mu0*I)/(4*np.pi)*((z-zp)*dx-(x-xp)*dz)/R**3
     dBz=(mu0*I)/(4*np.pi)*((x-xp)*dy-(y-yp)*dx)/R**3
+    if np.isnan(dBx):
+        dBx=0
+    if np.isnan(dBy):
+        dBy=0
+    if np.isnan(dBz):
+        dBz=0
     mu=3*mu0*I/(4*np.pi*R**5)
     dBxdx=mu*((z-zp)*dy-(y-yp)*dz)*(x-xp)
     dBxdy=mu*((z-zp)*(y-yp)*dy+((R**2)/3-(y-yp)**2)*dz)
@@ -61,6 +67,26 @@ class MagneticFieldSim():
     dBzdx=-mu*((x-xp)*(y-yp)*dx+((R**2)/3-(x-xp)**2)*dy)
     dBzdy=mu*((x-xp)*(y-yp)*dy+((R**2)/3-(y-yp)**2)*dx)
     dBzdz=mu*((x-xp)*dy-(y-yp)*dx)*(z-zp)
+
+    if np.isnan(dBxdx):
+        dBxdx=0
+    if np.isnan(dBydx):
+        dBydx=0
+    if np.isnan(dBzdx):
+        dBzdx=0
+    if np.isnan(dBxdy):
+        dBxdy=0
+    if np.isnan(dBydy):
+        dBydy=0
+    if np.isnan(dBzdy):
+        dBzdy=0   
+    if np.isnan(dBxdz):
+        dBxdz=0
+    if np.isnan(dBydz):
+        dBydz=0
+    if np.isnan(dBzdz):
+        dBzdz=0
+      
     J=np.array([[dBxdx,dBxdy,dBxdz],[dBydx,dBydy,dBydz],[dBzdx,dBzdy,dBzdz]])# magnetic field gradient
     return dBx,dBy,dBz,J
   def IntegrationOfBiotSavar(self):
