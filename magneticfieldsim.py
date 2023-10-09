@@ -47,10 +47,6 @@ class MagneticFieldSim():
     dx=-Rc*np.sin(beta)*dbeta
     dy=Rc*np.cos(beta)*dbeta
     dz=np.sign(zc)*2*p*dbeta
-    print(x-xp)
-    print(y-yp)
-    print(z-zp)
-
     R=np.sqrt((x-xp)**2+(y-yp)**2+(z-zp)**2)
     dBx=(mu0*I)/(4*np.pi)*((z-zp)*dy-(y-yp)*dz)/R**3
     dBy=-(mu0*I)/(4*np.pi)*((z-zp)*dx-(x-xp)*dz)/R**3
