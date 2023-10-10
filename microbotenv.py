@@ -217,6 +217,8 @@ class Microrobot_Env():
   def EnvPlot(self):
     fig =plt.figure(figsize=(10,10))
     axs = fig.add_subplot()
+     # fig = plt.figure()
+    axs = plt.axes(projection='3d')
 
     r1=self.r1
     r2=self.r2
@@ -247,16 +249,16 @@ class Microrobot_Env():
 
     # plt.plot(Ph[:,0],Ph[:,1],'m')
     # plt.plot( P[0]+self.Rh*np.cos(np.linspace(0,2*np.pi,20)), P[1]+self.Rh*np.sin(np.linspace(0,2*np.pi,20)) ,'m' )
-    plt.plot3D( C[0,0],C[0,1] ,C[0,2] ,'bo' )
-    plt.plot3D( C[1,0],C[1,1] ,C[1,2] ,'bo' )
-    plt.plot3D( C[2,0],C[2,1] ,C[2,2] ,'bo' )
-    plt.plot3D( C[3,0],C[3,1] ,C[3,2] ,'bo' )
-    plt.plot3D( C[4,0],C[4,1] ,C[4,2] ,'bo' )
-    plt.plot3D( C[5,0],C[5,1] ,C[5,2] ,'bo' )
+    axs.plot3D( C[0,0],C[0,1] ,C[0,2] ,'bo' )
+    axs.plot3D( C[1,0],C[1,1] ,C[1,2] ,'bo' )
+    axs.plot3D( C[2,0],C[2,1] ,C[2,2] ,'bo' )
+    axs.plot3D( C[3,0],C[3,1] ,C[3,2] ,'bo' )
+    axs.plot3D( C[4,0],C[4,1] ,C[4,2] ,'bo' )
+    axs.plot3D( C[5,0],C[5,1] ,C[5,2] ,'bo' )
     print(C)
 
-    plt.plot3d( P[0],P[1],0 ,'ro' )
-    plt.view(3)
+    axs.plot3d( P[0],P[1],0 ,'ro' )
+
     # axs.text(path[-1:,0],path[-1,1]+2e-3, 'P', fontsize=12)
     # if self.testmode==0:
     #   plt.plot(start_cart[0],start_cart[1],'bo')
