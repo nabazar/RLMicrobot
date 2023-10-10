@@ -257,7 +257,7 @@ class Microrobot_Env():
     axs.plot3D( C[4,0],C[4,1] ,C[4,2] ,'bo' )
     axs.plot3D( C[5,0],C[5,1] ,C[5,2] ,'bo' )
     
-    print(C)
+    print(self.CoilPositions)
 
     axs.plot3d( P[0],P[1],0 ,'ro' )
 
