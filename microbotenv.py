@@ -253,6 +253,7 @@ class Microrobot_Env():
     plt.plot( C[3,0],C[3,1] ,'bo' )
     plt.plot( C[4,0],C[4,1] ,'bo' )
     plt.plot( C[5,0],C[5,1] ,'bo' )
+    print(C)
 
     plt.plot( P[0],P[1] ,'ro' )
     # axs.text(path[-1:,0],path[-1,1]+2e-3, 'P', fontsize=12)
