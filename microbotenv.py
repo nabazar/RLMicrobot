@@ -250,8 +250,7 @@ class Microrobot_Env():
 
     # plt.plot(Ph[:,0],Ph[:,1],'m')
     # plt.plot( P[0]+self.Rh*np.cos(np.linspace(0,2*np.pi,20)), P[1]+self.Rh*np.sin(np.linspace(0,2*np.pi,20)) ,'m' )
-      
-    C=CoilPositions
+
     axs.plot3D( C[0,0],C[0,1] ,C[0,2] ,'bo' )
     axs.plot3D( C[1,0],C[1,1] ,C[1,2] ,'bo' )
     axs.plot3D( C[2,0],C[2,1] ,C[2,2] ,'bo' )
