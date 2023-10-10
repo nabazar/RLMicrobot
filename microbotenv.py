@@ -246,7 +246,7 @@ class Microrobot_Env():
     Ph=numpy.matlib.repmat(P,Prot.shape[1],1)+Prot.T # microrbot new position
 
     plt.plot(Ph[:,0],Ph[:,1],'m')
-    plt.plot( P[0]+Rh*np.cos(np.linspace(0,2*np.pi,20)), P[1]+Rh*np.sin(np.linspace(0,2*np.pi,20)) ,'m' )
+    plt.plot( P[0]+self.Rh*np.cos(np.linspace(0,2*np.pi,20)), P[1]+self.Rh*np.sin(np.linspace(0,2*np.pi,20)) ,'m' )
     plt.plot( C[0,0],C[0,1] ,'bo' )
     plt.plot( C[1,0],C[1,1] ,'bo' )
     plt.plot( C[2,0],C[2,1] ,'bo' )
