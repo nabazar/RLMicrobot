@@ -35,9 +35,9 @@ class MagneticFieldSim():
     P=self.P
     I=self.Ij
     mu0=4*np.pi*1e-7
-    xp=C[0]
-    yp=C[1]
-    zp=C[2]
+    xp=P[0]
+    yp=P[1]
+    zp=P[2]
     xc=C[0]
     yc=C[1]
     zc=C[2]
