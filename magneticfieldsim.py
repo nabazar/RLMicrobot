@@ -25,7 +25,7 @@ class MagneticFieldSim():
     ##Workspace Specifications
     self.Lw=15e-3 #length,width and hight of the workspace
     self.CoilPositions=np.array([[self.Lw/2,0,0],[0,self.Lw/2,0],[0,0,self.Lw/2],[-self.Lw/2,0,0],[0,-self.Lw/2,0],[0,0,-self.Lw/2]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
-
+    print(self.CoilPositions)
   def BiotSavar(self):
     beta=self.beta
     dbeta=self.dbeta
@@ -70,25 +70,6 @@ class MagneticFieldSim():
     dBzdy=mu*((x-xp)*(y-yp)*dy+((R**2)/3-(y-yp)**2)*dx)
     dBzdz=mu*((x-xp)*dy-(y-yp)*dx)*(z-zp)
 
-    # if np.isnan(dBxdx):
-    #     dBxdx=0
-    # if np.isnan(dBydx):
-    #     dBydx=0
-    # if np.isnan(dBzdx):
-    #     dBzdx=0
-    # if np.isnan(dBxdy):
-    #     dBxdy=0
-    # if np.isnan(dBydy):
-    #     dBydy=0
-    # if np.isnan(dBzdy):
-    #     dBzdy=0   
-    # if np.isnan(dBxdz):
-    #     dBxdz=0
-    # if np.isnan(dBydz):
-    #     dBydz=0
-    # if np.isnan(dBzdz):
-    #     dBzdz=0
-      
     J=np.array([[dBxdx,dBxdy,dBxdz],[dBydx,dBydy,dBydz],[dBzdx,dBzdy,dBzdz]])# magnetic field gradient
     return dBx,dBy,dBz,J
   def IntegrationOfBiotSavar(self):
