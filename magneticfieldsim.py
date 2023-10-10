@@ -23,9 +23,9 @@ class MagneticFieldSim():
     self.I=I
 
     ##Workspace Specifications
-    self.Lw=15e-3 #length,width and hight of the workspace
-    self.CoilPositions=np.array([[self.Lw/2,0,0],[0,self.Lw/2,0],[0,0,self.Lw/2],[-self.Lw/2,0,0],[0,-self.Lw/2,0],[0,0,-self.Lw/2]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
-    print(self.CoilPositions)
+    self.Lw=20e-3 #length,width and hight of the workspace
+    self.CoilPositions=np.array([[self.Lw,0,0],[0,self.Lw,0],[0,0,self.Lw],[-self.Lw,0,0],[0,-self.Lw,0],[0,0,-self.Lw]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
+      
   def BiotSavar(self):
     beta=self.beta
     dbeta=self.dbeta
