@@ -262,7 +262,7 @@ class Microrobot_Env():
     
     print(self.CoilPositions)
 
-    axs.plot3d( P[0],P[1],0 ,'ro' )
+    axs.plot3D( P[0],P[1],0 ,'ro' )
 
     # axs.text(path[-1:,0],path[-1,1]+2e-3, 'P', fontsize=12)
     # if self.testmode==0:
