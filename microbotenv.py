@@ -256,12 +256,12 @@ class Microrobot_Env():
 
     plt.plot( P[0],P[1] ,'ro' )
     # axs.text(path[-1:,0],path[-1,1]+2e-3, 'P', fontsize=12)
-    if self.testmode==0:
-      plt.plot(start_cart[0],start_cart[1],'bo')
-      plt.text(start_cart[0],start_cart[1]-2e-3, 'S', fontsize=12)
-      plt.plot(target_cart[0],target_cart[1],'go')
-      plt.text(target_cart[0],target_cart[1]+2e-3, 'G', fontsize=12)
-      plt.title("S: Start, G: Goal, P:End Position")
+    # if self.testmode==0:
+    #   plt.plot(start_cart[0],start_cart[1],'bo')
+    #   plt.text(start_cart[0],start_cart[1]-2e-3, 'S', fontsize=12)
+    #   plt.plot(target_cart[0],target_cart[1],'go')
+    #   plt.text(target_cart[0],target_cart[1]+2e-3, 'G', fontsize=12)
+    #   plt.title("S: Start, G: Goal, P:End Position")
 
     # return fig,axs
 
