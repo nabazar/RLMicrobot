@@ -255,6 +255,7 @@ class Microrobot_Env():
     axs.plot3D( C[3,0],C[3,1] ,C[3,2] ,'bo' )
     axs.plot3D( C[4,0],C[4,1] ,C[4,2] ,'bo' )
     axs.plot3D( C[5,0],C[5,1] ,C[5,2] ,'bo' )
+    
     print(C)
 
     axs.plot3d( P[0],P[1],0 ,'ro' )
