@@ -104,7 +104,7 @@ class Microrobot_Env():
     self.axs=0
     self.testmode=0
     self.Lw=15e-3 #length,width and hight of the workspace
-    self.CoilPositions=np.array([[self.Lw/2,0,0],[0,self.Lw/2,0],[0,0,self.Lw/2],[-self.Lw/2,0,0],[0,-self.Lw/2,0],[0,0,-self.Lw/2]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
+    self.CoilPositions=np.array([[self.Lw,0,0],[0,self.Lw,0],[0,0,self.Lw],[-self.Lw,0,0],[0,-self.Lw,0],[0,0,-self.Lw]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
       
   def step(self, action):
     self.goal = self.start + self.goal_distance
