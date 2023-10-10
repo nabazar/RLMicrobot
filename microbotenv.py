@@ -18,7 +18,6 @@ from mpl_toolkits import mplot3d
 from IPython.display import clear_output
 from RLMicrobot import *
 import numpy.matlib
-
 #@title
 def cart2pol(x, y):
     rho = np.sqrt(x**2 + y**2)
@@ -229,8 +228,8 @@ class Microrobot_Env():
     ys = np.sin(angles)
     xc2 = 0
     yc2 = 0;
-    fig =plt.figure(figsize=(10,10))
-    axs = fig.add_subplot()
+    # fig =plt.figure(figsize=(10,10))
+    # axs = fig.add_subplot()
     axs.plot(r1*xs, r1*ys, color = 'b')
     axs.plot(r2*xs, r2*ys, color = 'b')
     axs.plot((r1+r2)/2*xs, (r1+r2)/2*ys, color = 'c',linestyle='dashed')
