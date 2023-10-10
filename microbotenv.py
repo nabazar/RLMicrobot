@@ -131,6 +131,7 @@ class Microrobot_Env():
     P=np.array([rm*np.cos(theta),rm*np.sin(theta),0,1])
     self.P=P
     mag=MagneticFieldSim(P,I)
+    self.C=mag.C
     [B,J]=mag.IntegrationOfBiotSavar()
     # self.microbot=MicroRobotModel(B,J,theta)
     self.microbot.B=B
@@ -236,6 +237,7 @@ class Microrobot_Env():
     start_cart=self.start_cart
     target_cart=self.target_cart
     P=self.microbot.P
+    C=self.C
     th=self.microbot.th
     # phi=self.microbot.phi
     Rot=rotationmatrix(0,0,th+np.pi)
@@ -244,7 +246,14 @@ class Microrobot_Env():
     Ph=numpy.matlib.repmat(P,Prot.shape[1],1)+Prot.T # microrbot new position
 
     plt.plot(Ph[:,0],Ph[:,1],'m')
-    # plt.plot( P[0]+Rh*np.cos(np.linspace(0,2*np.pi,20)), P[1]+Rh*np.sin(np.linspace(0,2*np.pi,20)) ,'m' )
+    plt.plot( P[0]+Rh*np.cos(np.linspace(0,2*np.pi,20)), P[1]+Rh*np.sin(np.linspace(0,2*np.pi,20)) ,'m' )
+    plt.plot( C[0,0],C[0,1] ,'bo' )
+    plt.plot( C[1,0],C[1,1] ,'bo' )
+    plt.plot( C[2,0],C[2,1] ,'bo' )
+    plt.plot( C[3,0],C[3,1] ,'bo' )
+    plt.plot( C[4,0],C[4,1] ,'bo' )
+    plt.plot( C[5,0],C[5,1] ,'bo' )
+
     plt.plot( P[0],P[1] ,'ro' )
     # axs.text(path[-1:,0],path[-1,1]+2e-3, 'P', fontsize=12)
     if self.testmode==0:
