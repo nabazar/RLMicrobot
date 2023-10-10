@@ -103,7 +103,7 @@ class Microrobot_Env():
     self.observation_space = spaces.Box(low=0, high=2*np.pi,shape=(1,), dtype=np.float32)
     self.axs=0
     self.testmode=0
-    self.Lw=20e-3 #length,width and hight of the workspace
+    self.Lw=30e-3 #length,width and hight of the workspace
     self.CoilPositions=np.array([[self.Lw,0,0],[0,self.Lw,0],[0,0,self.Lw],[-self.Lw,0,0],[0,-self.Lw,0],[0,0,-self.Lw]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
       
   def step(self, action):
