@@ -133,7 +133,6 @@ class Microrobot_Env():
     P=np.array([rm*np.cos(theta),rm*np.sin(theta),0,1])
     self.P=P
     mag=MagneticFieldSim(P,I)
-    self.CoilPositions=mag.CoilPositions
     [B,J]=mag.IntegrationOfBiotSavar()
     # self.microbot=MicroRobotModel(B,J,theta)
     self.microbot.B=B
@@ -241,7 +240,7 @@ class Microrobot_Env():
     start_cart=self.start_cart
     target_cart=self.target_cart
     P=self.microbot.P
-    CoilPositions=self.CoilPositions
+    C=self.CoilPositions
     th=self.microbot.th
     # phi=self.microbot.phi
     Rot=rotationmatrix(0,0,th+np.pi)
@@ -260,7 +259,7 @@ class Microrobot_Env():
     axs.plot3D( C[4,0],C[4,1] ,C[4,2] ,'bo' )
     axs.plot3D( C[5,0],C[5,1] ,C[5,2] ,'bo' )
     
-    print(self.CoilPositions)
+    print(C)
 
     axs.plot3D( P[0],P[1],0 ,'ro' )
 
