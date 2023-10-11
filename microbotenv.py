@@ -122,9 +122,9 @@ class Microrobot_Env():
 
     t=self.time
 
-    Ix=100*action[0][0]
-    Iy=100*action[0][1]
-    Iz=100*action[0][2]
+    Ix=10*action[0][0]
+    Iy=10*action[0][1]
+    Iz=10*action[0][2]
     # theta_dot = 1.25*freq*M_z*(M_y*sin(phi_y)*sin(th-np.pi/2)+ M_x*sin(phi_x)*sin(th))
 
     I=[Ix,Iy,Iz,-Ix,-Iy,-Iz]
@@ -141,14 +141,11 @@ class Microrobot_Env():
     self.microbot.P=P
     self.microbot.th=theta
     [v,w,M]=self.microbot.MicroRobotDyn()
-    print(v)
-    print(w)
-    print(M)
-  
+
     dt=self.dt
     dphi=w[2]
-    dx=v[0]*np.cos(dphi)
-    dy=v[1]*np.sin(dphi)
+    dx=v[0]
+    dy=v[1]
     b=np.sqrt(x**2+y**2)
     x=x+dx
     y=y+dy
