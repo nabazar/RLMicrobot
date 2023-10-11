@@ -144,8 +144,8 @@ class Microrobot_Env():
   
     dt=self.dt
     dphi=w[2]
-    dx=v[0]*cos(dphi)
-    dy=v[1]*sin(dphi)
+    dx=v[0]*np.cos(dphi)
+    dy=v[1]*np.sin(dphi)
     b=np.sqrt(x**2+y**2)
     x=x+dx
     y=y+dy
