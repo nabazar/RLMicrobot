@@ -98,8 +98,8 @@ class Microrobot_Env():
 
     # self.action_space =np.array([[-1,-1, -1, -1], [1,1, 1, 1]])
     # self.observation_space =np.array([0])
-    self.action = np.array(np.random.uniform(-1,1,num_actions))
-    self.action_space = spaces.Box(low=-1, high=1, shape=(num_actions,), dtype=np.float32 )
+    self.action = np.array(np.random.uniform(-5,5,num_actions))
+    self.action_space = spaces.Box(low=-5, high=5, shape=(num_actions,), dtype=np.float32 )
     self.observation_space = spaces.Box(low=0, high=2*np.pi,shape=(1,), dtype=np.float32)
     self.axs=0
     self.testmode=0
@@ -151,13 +151,13 @@ class Microrobot_Env():
     y=y+dy
     a=np.sqrt(dx**2+dy**2)
     [new_r,new_theta]=cart2pol(x,y)
-    new_theta=self.correct_for_wrap_rad(new_theta)
+    # new_theta=self.correct_for_wrap_rad(new_theta)
     deltheta=new_theta-self.theta
-    deltheta=self.correct_for_wrap_rad(deltheta)
+    # deltheta=self.correct_for_wrap_rad(deltheta)
 
     c=new_r
     dltg=np.rad2deg(self.goal-new_theta)
-    dltg=self.correct_for_wrap_deg(dltg)
+    # dltg=self.correct_for_wrap_deg(dltg)
     if self.start>self.goal :
         dltg=abs(dltg)
     
