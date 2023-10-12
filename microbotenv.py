@@ -239,7 +239,7 @@ class Microrobot_Env():
     start_cart=self.start_cart
     target_cart=self.target_cart
     P=self.microbot.P
-    C=self.CoilPositions
+    C=self.mag.CoilPositions
     th=self.microbot.th
     # phi=self.microbot.phi
     Rot=rotationmatrix(0,0,th+np.pi)
