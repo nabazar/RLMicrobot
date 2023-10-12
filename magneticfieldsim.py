@@ -9,6 +9,7 @@ Original file is located at
 
 #Magnetic Field and its Gradient Coding
 import numpy as np
+import numpy.matlib 
 # Integration of the Magnetic field and its Gradient
 class MagneticFieldSim():
 
@@ -25,7 +26,37 @@ class MagneticFieldSim():
     ##Workspace Specifications
     self.Lw=2*self.Rc #length,width and hight of the workspace
     self.CoilPositions=np.array([[self.Lw/2,0,0],[0,self.Lw/2,0],[0,0,self.Lw/2],[-self.Lw/2,0,0],[0,-self.Lw/2,0],[0,0,-self.Lw/2]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
-      
+    for j in range(0,6):# the number of coils id wqual to 6
+        Cj=CoilPositions[j,:]
+        if   j==0 or j==3 :Cj[0]=C[j,2];Cj[1]=C[j,0];Cj[2]=C[j,1]
+        elif j==1 or j==4 :Cj[0]=C[j,0];Cj[1]=C[j,2];Cj[2]=C[j,1]
+        elif j==2 or j==5 :Cj[0]=C[j,0];Cj[1]=C[j,1];Cj[2]=C[j,2]
+
+    xc=Cj[0]
+    yc=Cj[1]
+    zc=Cj[2]
+    ntpl=500
+    n=1000
+    p=self.p
+    betah=np.linspace(0,2*ntpl*np.pi,n)
+    for j in range(0,6):# the number of coils id wqual to 6
+        if   j==0 or j==3 :
+            xx=numpy.matlib.repmat(zc,1,n)+self.Rc*np.cos(betah)
+            yy=numpy.matlib.repmat(xc,1,n)+self.Rc*np.sin(betah)
+            zz=numpy.matlib.repmat(yc,1,n)+np.sign(yc)*2*p*betah 
+        elif j==1 or j==4 :
+            dbx0=a;dby0=c;dbz0=b;J00[0,:]=d[0,:];J00[1,:]=d[2,:];J00[2,:]=d[1,:]
+            xx=numpy.matlib.repmat(xc,1,n)+self.Rc*np.cos(betah)
+            yy=numpy.matlib.repmat(zc,1,n)+self.Rc*np.sin(betah)
+            zz=numpy.matlib.repmat(yc,1,n)+np.sign(yc)*2*p*betah 
+        elif j==2 or j==5 :
+            dbx0=a;dby0=b;dbz0=c;J00[0,:]=d[0,:];J00[1,:]=d[1,:];J00[2,:]=d[2,:]
+            xx=numpy.matlib.repmat(xc,1,n)+self.Rc*np.cos(betah)
+            yy=numpy.matlib.repmat(yc,1,n)+self.Rc*np.sin(betah)
+            zz=numpy.matlib.repmat(zc,1,n)+np.sign(zc)*2*p*betah 
+
+    return xx,yy,zz
+     
   def BiotSavar(self):
     beta=self.beta
     dbeta=self.dbeta
