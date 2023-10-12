@@ -26,8 +26,9 @@ class MagneticFieldSim():
     ##Workspace Specifications
     self.Lw=2*self.Rc #length,width and hight of the workspace
     self.CoilPositions=np.array([[self.Lw/2,0,0],[0,self.Lw/2,0],[0,0,self.Lw/2],[-self.Lw/2,0,0],[0,-self.Lw/2,0],[0,0,-self.Lw/2]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
+    C=self.CoilPositions
     for j in range(0,6):# the number of coils id wqual to 6
-        Cj=self.CoilPositions[j,:]
+        Cj=self.C[j,:]
         if   j==0 or j==3 :Cj[0]=C[j,2];Cj[1]=C[j,0];Cj[2]=C[j,1]
         elif j==1 or j==4 :Cj[0]=C[j,0];Cj[1]=C[j,2];Cj[2]=C[j,1]
         elif j==2 or j==5 :Cj[0]=C[j,0];Cj[1]=C[j,1];Cj[2]=C[j,2]
