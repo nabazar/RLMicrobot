@@ -250,14 +250,12 @@ class Microrobot_Env():
     # plt.plot(Ph[:,0],Ph[:,1],'m')
     # plt.plot( P[0]+self.Rh*np.cos(np.linspace(0,2*np.pi,20)), P[1]+self.Rh*np.sin(np.linspace(0,2*np.pi,20)) ,'m' )
     xx,yy,zz=self.mag.xx,self.mag.yy,self.mag.zz
-    axs.plot3D( C[0,0],C[0,1] ,C[0,2] ,'bo' )
-    axs.plot3D( C[1,0],C[1,1] ,C[1,2] ,'bo' )
-    axs.plot3D( C[2,0],C[2,1] ,C[2,2] ,'bo' )
-    axs.plot3D( C[3,0],C[3,1] ,C[3,2] ,'bo' )
-    axs.plot3D( C[4,0],C[4,1] ,C[4,2] ,'bo' )
-    axs.plot3D( C[5,0],C[5,1] ,C[5,2] ,'bo' )
-    
-    print(C)
+    axs.plot3D( xx[0],yy[0] ,zz[0] ,'bo' )
+    axs.plot3D( xx[1],yy[1] ,zz[1] ,'go' )
+    axs.plot3D( xx[2],yy[2] ,zz[2] ,'ro' )
+    axs.plot3D( xx[3],yy[3] ,zz[3] ,'bo' )
+    axs.plot3D( xx[4],yy[4] ,zz[4] ,'go' )
+    axs.plot3D( xx[5],yy[5] ,zz[5] ,'ro' )
 
     axs.plot3D( P[0],P[1],0 ,'ro' )
 
