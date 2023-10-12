@@ -56,9 +56,9 @@ class MagneticFieldSim():
             xx=numpy.matlib.repmat(xc,1,n)+self.Rc*np.cos(betah)
             yy=numpy.matlib.repmat(yc,1,n)+self.Rc*np.sin(betah)
             zz=numpy.matlib.repmat(zc,1,n)+np.sign(zc)*2*p*betah 
-        self.xx.append(xx)
-        self.yy.append(yy)
-        self.yy.append(zz)
+        self.xx=np.append(self.xx,xx)
+        self.yy=np.append(self.yy,yy)
+        self.zz=np.append(self.zz,zz)
 
 
      
