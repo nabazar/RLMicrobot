@@ -54,8 +54,11 @@ class MagneticFieldSim():
             xx=numpy.matlib.repmat(xc,1,n)+self.Rc*np.cos(betah)
             yy=numpy.matlib.repmat(yc,1,n)+self.Rc*np.sin(betah)
             zz=numpy.matlib.repmat(zc,1,n)+np.sign(zc)*2*p*betah 
+        self.xx.append(xx)
+        self.yy.append(xx)
+        self.yy.append(xx)
 
-    return xx,yy,zz
+
      
   def BiotSavar(self):
     beta=self.beta
