@@ -40,6 +40,9 @@ class MagneticFieldSim():
     n=1000
     p=self.p
     betah=np.linspace(0,2*ntpl*np.pi,n)
+    self.xx=[]
+    self.yy=[]
+    self.zz=[]
     for j in range(0,6):# the number of coils id wqual to 6
         if   j==0 or j==3 :
             xx=numpy.matlib.repmat(zc,1,n)+self.Rc*np.cos(betah)
@@ -56,8 +59,8 @@ class MagneticFieldSim():
             yy=numpy.matlib.repmat(yc,1,n)+self.Rc*np.sin(betah)
             zz=numpy.matlib.repmat(zc,1,n)+np.sign(zc)*2*p*betah 
         self.xx.append(xx)
-        self.yy.append(xx)
-        self.yy.append(xx)
+        self.yy.append(yy)
+        self.yy.append(zz)
 
 
      
