@@ -131,6 +131,7 @@ class Microrobot_Env():
     P=np.array([rm*np.cos(theta),rm*np.sin(theta),0,1])
     self.P=P
     mag=MagneticFieldSim(P,I)
+    self.mag=mag
     [B,J]=mag.IntegrationOfBiotSavar()
     # self.microbot=MicroRobotModel(B,J,theta)
     self.microbot.B=B
@@ -248,7 +249,7 @@ class Microrobot_Env():
 
     # plt.plot(Ph[:,0],Ph[:,1],'m')
     # plt.plot( P[0]+self.Rh*np.cos(np.linspace(0,2*np.pi,20)), P[1]+self.Rh*np.sin(np.linspace(0,2*np.pi,20)) ,'m' )
-
+    xx,yy,zz=self.mag.xx,self.mag.yy,self.mag.zz
     axs.plot3D( C[0,0],C[0,1] ,C[0,2] ,'bo' )
     axs.plot3D( C[1,0],C[1,1] ,C[1,2] ,'bo' )
     axs.plot3D( C[2,0],C[2,1] ,C[2,2] ,'bo' )
