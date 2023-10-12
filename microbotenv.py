@@ -249,8 +249,8 @@ class Microrobot_Env():
 
     # plt.plot(Ph[:,0],Ph[:,1],'m')
     # plt.plot( P[0]+self.Rh*np.cos(np.linspace(0,2*np.pi,20)), P[1]+self.Rh*np.sin(np.linspace(0,2*np.pi,20)) ,'m' )
-    xx,yy,zz=self.mag.xx[0],self.mag.yy[0],self.mag.zz[0]
-    print(xx)
+    xx,yy,zz=self.mag.xx,self.mag.yy,self.mag.zz
+
     axs.plot3D( xx[0],yy[0] ,zz[0] ,'bo' )
     axs.plot3D( xx[1],yy[1] ,zz[1] ,'go' )
     axs.plot3D( xx[2],yy[2] ,zz[2] ,'ro' )
