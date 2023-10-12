@@ -38,8 +38,8 @@ class MagneticFieldSim():
         if   j==0 or j==3 :
             xc=C[j,2];yc=C[j,0];zc=C[j,1]
             xx=numpy.matlib.repmat(zc,1,n)+self.Rc*np.cos(betah)
-            yy=numpy.matlib.repmat(yc,1,n)+self.Rc*np.sin(betah)
-            zz=numpy.matlib.repmat(xc,1,n)+np.sign(xc)*2*p*betah 
+            yy=numpy.matlib.repmat(xc,1,n)+self.Rc*np.sin(betah)
+            zz=numpy.matlib.repmat(yc,1,n)+np.sign(yc)*2*p*betah 
         elif j==1 or j==4 :
             xc=C[j,0];yc=C[j,2];zc=C[j,1]
             xx=numpy.matlib.repmat(xc,1,n)+self.Rc*np.cos(betah)
