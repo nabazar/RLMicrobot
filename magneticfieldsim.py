@@ -46,8 +46,8 @@ class MagneticFieldSim():
     for j in range(0,6):# the number of coils id wqual to 6
         if   j==0 or j==3 :
             xx=numpy.matlib.repmat(zc,1,n)+self.Rc*np.cos(betah)
-            yy=numpy.matlib.repmat(xc,1,n)+self.Rc*np.sin(betah)
-            zz=numpy.matlib.repmat(yc,1,n)+np.sign(yc)*2*p*betah 
+            yy=numpy.matlib.repmat(yc,1,n)+self.Rc*np.sin(betah)
+            zz=numpy.matlib.repmat(xc,1,n)+np.sign(xc)*2*p*betah 
         elif j==1 or j==4 :
             xx=numpy.matlib.repmat(xc,1,n)+self.Rc*np.cos(betah)
             yy=numpy.matlib.repmat(zc,1,n)+self.Rc*np.sin(betah)
