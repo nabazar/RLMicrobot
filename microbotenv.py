@@ -121,18 +121,16 @@ class Microrobot_Env():
     t=self.time
 
     mu1=1
-    Ix=mu1*action[0]
-    Iy=mu1*action[1]
-    Iz=mu1*action[2]
-    Ix2=-mu1*action[0]
-    Iy2=-mu1*action[1]
-    Iz2=-mu1*action[2]  
+    Ix=mu1*action[0][0]
+    Iy=mu1*action[0][1]
+    Iz=mu1*action[0][2]
+    Ix2=-mu1*action[0][0]
+    Iy2=-mu1*action[0][1]
+    Iz2=-mu1*action[0][2]  
     
     # theta_dot = 1.25*freq*M_z*(M_y*sin(phi_y)*sin(th-np.pi/2)+ M_x*sin(phi_x)*sin(th))
 
-    I=np.array([Ix,Iy,Iz,Ix2,Iy2,Iz2])
-    I=np.reshape(I,(-1,6))
-
+    I=[Ix,Iy,Iz,Ix2,Iy2,Iz2]
     self.info=I
     theta=self.state
     P=np.array([x,y,0,1])
@@ -198,7 +196,8 @@ class Microrobot_Env():
     self.done = 0
     self.reward = 0
     r=self.rm
-    self.start = np.array(np.random.uniform(0,2*np.pi,1))
+    self.start = np.array(np.random.uniform(0,2*np.pi,(1,1)))
+    # self.start = np.random.uniform(0,2*np.pi)
     self.theta=self.start
     self.goal = self.start + self.goal_distance
     self.goal=self.correct_for_wrap_rad(self.goal)
