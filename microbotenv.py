@@ -98,8 +98,8 @@ class Microrobot_Env():
 
     # self.action_space =np.array([[-1,-1, -1, -1], [1,1, 1, 1]])
     # self.observation_space =np.array([0])
-    self.action = np.array(np.random.uniform(-1,1,num_actions))
-    self.action_space = spaces.Box(low=-1, high=1, shape=(num_actions,), dtype=np.float32 )
+    self.action = np.array(np.random.uniform(-50,50,num_actions))
+    self.action_space = spaces.Box(low=-50, high=50, shape=(num_actions,), dtype=np.float32 )
     self.observation_space = spaces.Box(low=0, high=2*np.pi,shape=(1,), dtype=np.float32)
     self.axs=0
     self.testmode=0
@@ -120,7 +120,7 @@ class Microrobot_Env():
 
     t=self.time
 
-    mu1=50
+    mu1=1
     Ix=mu1*action[0][0]
     Iy=mu1*action[0][1]
     Iz=mu1*action[0][2]
@@ -178,13 +178,13 @@ class Microrobot_Env():
     d_target=np.sqrt((xt-x)**2+(yt-y)**2)
 
 
-    loss = -1/2*abs(1e2*d_target)-1/2*abs(dltg)
-    self.reward =0.01*loss
+    loss = -1/2*abs(1e2*d_target)**2-1/2*abs(dltg)**2
+    self.reward =0.001*loss
     if abs(d_target)<5e-4 and abs(dltg)<1 and deltheta>0:
         self.reward=self.reward+100
         self.done=1
     else:
-        self.reward=self.reward
+        self.reward=self.reward-100
         self.done=0
     self.r1=r1
     self.r2=r2
