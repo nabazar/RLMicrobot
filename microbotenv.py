@@ -177,8 +177,8 @@ class Microrobot_Env():
     d_target=np.sqrt((xt-x)**2+(yt-y)**2)
 
 
-    loss = -1/2*(1e3*d_target)**2-1/2*dltg**2
-    self.reward =0.001*loss
+    loss = -1/2*abs(1e2*d_target)-1/2*abs(dltg)
+    self.reward =0.01*loss
     if abs(d_target)<5e-4 and abs(dltg)<1 and deltheta>0:
         self.reward=self.reward+100
         self.done=1
