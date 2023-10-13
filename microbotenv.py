@@ -140,7 +140,7 @@ class Microrobot_Env():
     self.microbot.P=P
     self.microbot.th=theta
     [v,w,M]=self.microbot.MicroRobotDyn()
-    print([v,w])
+
 
     dt=self.dt
     dphi=w[2]
