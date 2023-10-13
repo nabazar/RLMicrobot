@@ -38,8 +38,6 @@ class MicroRobotModel():
     self.axs=0
     self.phi=np.pi/4
     self.freq=0.8
-    print(B)
-    print(J)
 
 
   def spiralMicroRobot(self):
@@ -93,8 +91,8 @@ class MicroRobotModel():
 
     M=self.mh
     # M=np.array([mh*np.cos(phi) ,mh*np.sin(phi),0] ) #Microrobot magnetization
-    M.shape
-    B.shape
+    print(M.shape)
+    print(B.shape)
 
     tow=np.cross(M,B)# torque implemented on the microrbot by the magnetic filed
     F=np.dot(M,J)# force implemented by magnetic field gradients on the microrobot
