@@ -196,7 +196,7 @@ class Microrobot_Env():
     self.done = 0
     self.reward = 0
     r=self.rm
-    self.start = np.array(np.random.uniform(0,2*np.pi,(1,1)))
+    self.start = np.random.uniform(0,2*np.pi)
     # self.start = np.random.uniform(0,2*np.pi)
     self.theta=self.start
     self.goal = self.start + self.goal_distance
