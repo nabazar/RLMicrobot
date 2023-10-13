@@ -98,7 +98,7 @@ class Microrobot_Env():
 
     # self.action_space =np.array([[-1,-1, -1, -1], [1,1, 1, 1]])
     # self.observation_space =np.array([0])
-    self.action = np.array(np.random.uniform(-10,10,num_actions))
+    self.action = np.array(np.random.uniform(-50,50,num_actions))
     self.action_space = spaces.Box(low=-50, high=50, shape=(num_actions,), dtype=np.float32 )
     self.observation_space = spaces.Box(low=0, high=2*np.pi,shape=(1,), dtype=np.float32)
     self.axs=0
