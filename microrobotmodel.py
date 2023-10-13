@@ -95,7 +95,7 @@ class MicroRobotModel():
     # M=np.array([mh*np.cos(phi) ,mh*np.sin(phi),0] ) #Microrobot magnetization
     print(M.shape)
     print(B.shape)
-    tow=np.cross(M,B)# torque implemented on the microrbot by the magnetic filed
+    tow=np.cross(np.diag(M.T),B)# torque implemented on the microrbot by the magnetic filed
     F=np.dot(M,J)# force implemented by magnetic field gradients on the microrobot
     H=self.helicalMatrix()
     T=[F,tow]
