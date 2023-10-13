@@ -92,13 +92,13 @@ class Microrobot_Env():
     self.target_cart=[xt,yt,phit]
     self.path=[0,0,0]
     self.step_rate=1
-    num_actions=3
+    num_actions=6
     self.num_actions=num_actions
     self.action_last = np.zeros((num_actions,))
 
     # self.action_space =np.array([[-1,-1, -1, -1], [1,1, 1, 1]])
     # self.observation_space =np.array([0])
-    self.action = np.array(np.random.uniform(-1,1,num_actions))
+    self.action = np.array(np.random.uniform(-10,10,num_actions))
     self.action_space = spaces.Box(low=-10, high=10, shape=(num_actions,), dtype=np.float32 )
     self.observation_space = spaces.Box(low=0, high=2*np.pi,shape=(1,), dtype=np.float32)
     self.axs=0
@@ -123,9 +123,13 @@ class Microrobot_Env():
     Ix=1*action[0][0]
     Iy=1*action[0][1]
     Iz=1*action[0][2]
+    Ix2=-1*action[0][3]
+    Iy2=-1*action[0][4]
+    Iz2=-1*action[0][5]  
+    print(I)
     # theta_dot = 1.25*freq*M_z*(M_y*sin(phi_y)*sin(th-np.pi/2)+ M_x*sin(phi_x)*sin(th))
 
-    I=[Ix,Iy,Iz,-Ix,-Iy,-Iz]
+    I=[Ix,Iy,Iz,Ix2,Iy2,Iz2]
     self.info=I
     theta=self.state
     P=np.array([x,y,0,1])
