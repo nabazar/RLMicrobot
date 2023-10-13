@@ -123,9 +123,9 @@ class Microrobot_Env():
     Ix=1*action[0][0]
     Iy=1*action[0][1]
     Iz=1*action[0][2]
-    Ix2=-1*action[0][1]
-    Iy2=-1*action[0][2]
-    Iz2=-1*action[0][3]  
+    Ix2=-1*action[0][0]
+    Iy2=-1*action[0][1]
+    Iz2=-1*action[0][2]  
     
     # theta_dot = 1.25*freq*M_z*(M_y*sin(phi_y)*sin(th-np.pi/2)+ M_x*sin(phi_x)*sin(th))
 
