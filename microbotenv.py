@@ -120,9 +120,9 @@ class Microrobot_Env():
 
     t=self.time
 
-    Ix=10*action[0][0]
-    Iy=10*action[0][1]
-    Iz=10*action[0][2]
+    Ix=15*action[0][0]
+    Iy=15*action[0][1]
+    Iz=15*action[0][2]
     # theta_dot = 1.25*freq*M_z*(M_y*sin(phi_y)*sin(th-np.pi/2)+ M_x*sin(phi_x)*sin(th))
 
     I=[Ix,Iy,Iz,-Ix,-Iy,-Iz]
