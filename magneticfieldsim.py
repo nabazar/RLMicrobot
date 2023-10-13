@@ -29,7 +29,7 @@ class MagneticFieldSim():
     C=self.CoilPositions
     ntpl=2
     n=1000
-    p=self.p
+    p=self.Lc/(2*self.ntpl*np.pi)
     betah=np.linspace(0,2*ntpl*np.pi,n)
     self.xx=np.ndarray((6,n))
     self.yy=np.ndarray((6,n))
