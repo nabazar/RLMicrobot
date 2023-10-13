@@ -171,10 +171,10 @@ class Microrobot_Env():
     d_target=np.sqrt((xt-x)**2+(yt-y)**2)
 
 
-    self.reward = -abs(dltg)
+    self.reward = -1/2*dltg**2
     # self.reward =0.001*self.reward
     if abs(dltg)<1 and deltheta>0:
-        self.reward = self.reward +200
+        self.reward = self.reward +500
         self.done=1
     else:
         # self.reward =-2
