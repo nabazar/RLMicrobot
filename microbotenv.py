@@ -173,7 +173,7 @@ class Microrobot_Env():
 
 
     loss = -1/2*d_target**2-1/2*dltg**2
-    self.reward =0.001*loss
+    self.reward =0.01*loss
     if abs(d_target)<5e-4 and abs(dltg)<1 and deltheta>0:
         self.reward=self.reward+100
         self.done=1
