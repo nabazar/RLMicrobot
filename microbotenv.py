@@ -174,10 +174,10 @@ class Microrobot_Env():
     self.reward = -1/2*dltg**2
     self.reward =0.001*self.reward
     if abs(dltg)<1 and deltheta>0:
-        self.reward+ = 100
+        self.reward=self.reward+100
         self.done=1
     else:
-        self.reward+ =-2
+        self.reward=self.reward-2
         self.done=0
     self.r1=r1
     self.r2=r2
