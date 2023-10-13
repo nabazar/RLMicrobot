@@ -36,20 +36,17 @@ class MagneticFieldSim():
     self.zz=np.ndarray((6,n))
     for j in range(0,6):# the number of coils id wqual to 6
         if   j==0 or j==3 :
-            xc=C[j,2];yc=C[j,1];zc=C[j,0]
-            zz=numpy.matlib.repmat(zc,1,n)+self.Rc*np.cos(betah)
-            yy=numpy.matlib.repmat(yc,1,n)+self.Rc*np.sin(betah)
-            xx=numpy.matlib.repmat(xc,1,n)+np.sign(zc)*2*p*betah 
+            zz=numpy.matlib.repmat(C[j,2],1,n)+self.Rc*np.cos(betah)
+            yy=numpy.matlib.repmat(C[j,1],1,n)+self.Rc*np.sin(betah)
+            xx=numpy.matlib.repmat(C[j,0],1,n)+np.sign(C[j,0])*2*p*betah 
         elif j==1 or j==4 :
-            xc=C[j,0];yc=C[j,2];zc=C[j,1]
-            xx=numpy.matlib.repmat(xc,1,n)+self.Rc*np.cos(betah)
-            zz=numpy.matlib.repmat(zc,1,n)+self.Rc*np.sin(betah)
-            yy=numpy.matlib.repmat(yc,1,n)+np.sign(zc)*2*p*betah 
+            xx=numpy.matlib.repmat(C[j,0],1,n)+self.Rc*np.cos(betah)
+            zz=numpy.matlib.repmat(C[j,2],1,n)+self.Rc*np.sin(betah)
+            yy=numpy.matlib.repmat(C[j,1],1,n)+np.sign(C[j,1])*2*p*betah 
         elif j==2 or j==5 :
-            xc=C[j,0];yc=C[j,1];zc=C[j,2]
-            xx=numpy.matlib.repmat(xc,1,n)+self.Rc*np.cos(betah)
-            yy=numpy.matlib.repmat(yc,1,n)+self.Rc*np.sin(betah)
-            zz=numpy.matlib.repmat(zc,1,n)+np.sign(zc)*2*p*betah 
+            xx=numpy.matlib.repmat(C[j,0],1,n)+self.Rc*np.cos(betah)
+            yy=numpy.matlib.repmat(C[j,1],1,n)+self.Rc*np.sin(betah)
+            zz=numpy.matlib.repmat(C[j,2],1,n)+np.sign(C[j,2])*2*p*betah 
         self.xx[j,:]=xx
         self.yy[j,:]=yy
         self.zz[j,:]=zz
