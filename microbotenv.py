@@ -131,6 +131,7 @@ class Microrobot_Env():
     # theta_dot = 1.25*freq*M_z*(M_y*sin(phi_y)*sin(th-np.pi/2)+ M_x*sin(phi_x)*sin(th))
 
     I=np.array([Ix,Iy,Iz,Ix2,Iy2,Iz2])
+    I=np.reshape(I,(-1,6))
 
     self.info=I
     theta=self.state
