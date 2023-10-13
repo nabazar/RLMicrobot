@@ -61,7 +61,7 @@ class Microrobot_Env():
     self.start =0
     self.theta = 0
     self.theta_dot = 0
-    self.goal_distance =np.deg2rad( 5)
+    self.goal_distance =np.deg2rad( 3)
     self.goal = self.start + self.goal_distance
     self.goal=self.correct_for_wrap_rad(self.goal)
     self.target_direction = 1
