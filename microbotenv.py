@@ -128,7 +128,7 @@ class Microrobot_Env():
     I=[Ix,Iy,Iz,-Ix,-Iy,-Iz]
     self.info=I
     theta=self.state
-    P=np.array([rm*np.cos(theta),rm*np.sin(theta),0,1])
+    P=np.array([x,y,0,1])
     self.P=P
     mag=MagneticFieldSim(P,I)
     self.mag=mag
@@ -144,11 +144,11 @@ class Microrobot_Env():
 
     dt=self.dt
     dphi=w[2]
-    dx=v[0]
-    dy=v[1]
+    dx=v[0]*np.cos(w[0])
+    dy=v[1]*np.cos(w[1])
     b=np.sqrt(x**2+y**2)
-    x=x+dx
-    y=y+dy
+    x=x+dt*dx
+    y=y+dt*dy
     a=np.sqrt(dx**2+dy**2)
     [new_r,new_theta]=cart2pol(x,y)
     # new_theta=self.correct_for_wrap_rad(new_theta)
@@ -156,13 +156,13 @@ class Microrobot_Env():
     # deltheta=self.correct_for_wrap_rad(deltheta)
 
     c=new_r
+
+    self.microbot.phi=0
+    P=np.array([x,y,0,1])
     dltg=np.rad2deg(self.goal-new_theta)
-    # dltg=self.correct_for_wrap_deg(dltg)
     if self.start>self.goal :
         dltg=abs(dltg)
     
-    self.microbot.phi=0
-    P=np.array([rm*np.cos(new_theta),rm*np.sin(new_theta),0,1])
     self.microbot.P=P
     self.microbot.th=new_theta
 
@@ -172,9 +172,9 @@ class Microrobot_Env():
     d_target=np.sqrt((xt-x)**2+(yt-y)**2)
 
 
-    self.reward = -1/2*dltg**2
-    self.reward =0.001*self.reward
-    if abs(dltg)<1 and deltheta>0:
+    loss = -1/2*d_target**2-1/2*dltg**2
+    self.reward =0.001*loss
+    if abs(d_target)<5e-4 and abs(dltg)<1 and deltheta>0:
         self.reward=self.reward+100
         self.done=1
     else:
