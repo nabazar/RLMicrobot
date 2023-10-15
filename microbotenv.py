@@ -63,7 +63,7 @@ class Microrobot_Env():
     self.theta_dot = 0
     self.goal_distance =np.deg2rad( 3)
     self.goal = self.start + self.goal_distance
-    self.goal=self.correct_for_wrap_rad(self.goal)
+    # self.goal=self.correct_for_wrap_rad(self.goal)
     self.target_direction = 1
     self.success_reward = 100
     self.theta_dot = 0
@@ -106,8 +106,8 @@ class Microrobot_Env():
     
   def step(self, action):
     self.goal = self.start + self.goal_distance
-    self.goal=self.correct_for_wrap_rad(self.goal)
-    self.state=self.correct_for_wrap_rad(self.state)
+    # self.goal=self.correct_for_wrap_rad(self.goal)
+    # self.state=self.correct_for_wrap_rad(self.state)
     x=self.rm*np.cos(self.state)
     y=self.rm*np.sin(self.state)
     phi=0
@@ -128,8 +128,6 @@ class Microrobot_Env():
     Iy2=-mu1*action[0][1]
     Iz2=-mu1*action[0][2]  
     
-    # theta_dot = 1.25*freq*M_z*(M_y*sin(phi_y)*sin(th-np.pi/2)+ M_x*sin(phi_x)*sin(th))
-
     I=[Ix,Iy,Iz,Ix2,Iy2,Iz2]
     self.info=I
     theta=self.state
@@ -197,8 +195,8 @@ class Microrobot_Env():
     self.done = 0
     self.reward = 0
     r=self.rm
-    self.start = np.random.uniform(0,2*np.pi)
     # self.start = np.random.uniform(0,2*np.pi)
+    self.start = np.random.randint(0,2*np.pi)
     self.theta=self.start
     self.goal = self.start + self.goal_distance
     self.goal=self.correct_for_wrap_rad(self.goal)
