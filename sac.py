@@ -108,8 +108,8 @@ class Actor(nn.Module):
 
     def sample_normal(self, state, reparameterize=True):
         mu, sigma = self.forward(state)
-        print(mu)
-        print(sigma)
+        print(mu.shape)
+        print(sigma.shape)
         
         probs = Normal(mu, sigma)
         if reparameterize:
