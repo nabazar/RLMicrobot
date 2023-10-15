@@ -120,7 +120,7 @@ class Microrobot_Env():
 
     t=self.time
 
-    mu1=10
+    mu1=15
     Ix=mu1*action[0][0]
     Iy=mu1*action[0][1]
     Iz=mu1*action[0][2]
