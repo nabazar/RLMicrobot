@@ -195,11 +195,11 @@ class Microrobot_Env():
     self.done = 0
     self.reward = 0
     r=self.rm
-    # self.start = np.random.uniform(0,2*np.pi)
-    self.start = np.random.randint(0,2*np.pi)
+    self.start = np.random.uniform(0,2*np.pi)
+    # self.start = np.random.randint(0,2*np.pi)
     self.theta=self.start
     self.goal = self.start + self.goal_distance
-    self.goal=self.correct_for_wrap_rad(self.goal)
+    # self.goal=self.correct_for_wrap_rad(self.goal)
     [xt,yt]=pol2cart(self.rm,self.goal)
     phit=0
     self.target_cart=[xt,yt,phit]
