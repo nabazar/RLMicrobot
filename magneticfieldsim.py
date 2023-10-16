@@ -19,7 +19,7 @@ class MagneticFieldSim():
     self.ntpl=500 #number of turns per layer
     self.Lc=20e-3# length of any coil
     self.p=self.Lc/(2*self.ntpl*np.pi)
-    self.nd=1000
+    self.nd=10000
     self.Rc=25e-3 #radius of any coil
     self.I=I
 
@@ -27,8 +27,8 @@ class MagneticFieldSim():
     self.Lw=2*self.Rc #length,width and hight of the workspace
     self.CoilPositions=np.array([[self.Lw/2,0,0],[0,self.Lw/2,0],[0,0,self.Lw/2],[-self.Lw/2,0,0],[0,-self.Lw/2,0],[0,0,-self.Lw/2]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
     C=self.CoilPositions
-    ntpl=20
-    n=1000
+    ntpl=500
+    n=10000
     p=self.Lc/(2*ntpl*np.pi)
     betah=np.linspace(0,2*ntpl*np.pi,n)
     self.xx=np.ndarray((6,n))
