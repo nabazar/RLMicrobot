@@ -27,7 +27,7 @@ class MagneticFieldSim():
     self.Lw=2*self.Rc #length,width and hight of the workspace
     self.CoilPositions=np.array([[self.Lw/2,0,0],[0,self.Lw/2,0],[0,0,self.Lw/2],[-self.Lw/2,0,0],[0,-self.Lw/2,0],[0,0,-self.Lw/2]])#coils positions( x,y,z coordinates for 6x3: 6 coils)
     C=self.CoilPositions
-    ntpl=10
+    ntpl=7
     n=10000
     p=self.Lc/(2*ntpl*np.pi)
     betah=np.linspace(0,2*ntpl*np.pi,n)
