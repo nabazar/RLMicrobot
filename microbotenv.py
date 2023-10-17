@@ -264,7 +264,7 @@ class Microrobot_Env():
     axs.plot3D( xx[4,:],yy[4,:] ,zz[4,:] ,'g' )
     axs.plot3D( xx[5,:],yy[5,:] ,zz[5,:] ,'r' )
 
-    axs.plot3D( P[0],P[1],0 ,'ro' )
+    axs.plot3D( P[0],P[1],0 ,'go' )
     self.axs=axs
     # axs.text(path[-1:,0],path[-1,1]+2e-3, 'P', fontsize=12)
     # if self.testmode==0:
