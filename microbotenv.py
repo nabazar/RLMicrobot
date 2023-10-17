@@ -265,7 +265,7 @@ class Microrobot_Env():
     axs.plot3D( xx[5,:],yy[5,:] ,zz[5,:] ,'ro' )
 
     axs.plot3D( P[0],P[1],0 ,'ro' )
-
+    self.axs=axs
     # axs.text(path[-1:,0],path[-1,1]+2e-3, 'P', fontsize=12)
     # if self.testmode==0:
     #   plt.plot(start_cart[0],start_cart[1],'bo')
