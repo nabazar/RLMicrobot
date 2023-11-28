@@ -156,6 +156,8 @@ class Microrobot_Env():
     b=np.sqrt(x**2+y**2)
     x=x+dt*dx
     y=y+dt*dy
+    print(x)
+    print(y
  
     a=np.sqrt(dx**2+dy**2)
     [new_r,new_theta]=cart2pol(x,y)
