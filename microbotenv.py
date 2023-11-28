@@ -136,6 +136,7 @@ class Microrobot_Env():
     mag=MagneticFieldSim(P,I)
     self.mag=mag
     [B,J]=mag.IntegrationOfBiotSavar()
+      
     # self.microbot=MicroRobotModel(B,J,theta)
     self.microbot.B=B
     self.microbot.phi=phi
@@ -143,6 +144,9 @@ class Microrobot_Env():
     self.microbot.P=P
     self.microbot.th=theta
     [v,w,M]=self.microbot.MicroRobotDyn()
+    print('v=',v)
+    print('w=',w)
+    print('M=',M)
 
 
     dt=self.dt
