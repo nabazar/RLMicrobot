@@ -179,8 +179,6 @@ class Microrobot_Env():
     phit=self.target_cart[2]
     d_target=np.sqrt((xt-x)**2+(yt-y)**2)
 
-    print(d_target)
-    print(dltg)
 
     loss = -1/2*abs(1e2*d_target)**2-1/2*abs(dltg)**2
     # print(d_target,dltg)
