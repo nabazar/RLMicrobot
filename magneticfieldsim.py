@@ -19,7 +19,7 @@ class MagneticFieldSim():
     self.ntpl=500 #number of turns per layer
     self.Lc=20e-3# length of any coil
     self.p=self.Lc/(2*self.ntpl*np.pi)
-    self.nd=10000
+    self.nd=1000
     self.Rc=30e-3 #radius of any coil
     self.I=I
 
