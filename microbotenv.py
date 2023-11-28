@@ -110,6 +110,7 @@ class Microrobot_Env():
     # self.state=self.correct_for_wrap_rad(self.state)
     x=self.rm*np.cos(self.state)
     y=self.rm*np.sin(self.state)
+    
     phi=0
     z=0
     rm=self.rm
@@ -144,18 +145,18 @@ class Microrobot_Env():
     self.microbot.P=P
     self.microbot.th=theta
     [v,w,M]=self.microbot.MicroRobotDyn()
-    print('v=',v)
-    print('w=',w)
-    print('M=',M)
-
 
     dt=self.dt
-    dphi=w[2]
-    dx=v[0]*np.cos(w[0])
-    dy=v[1]*np.sin(w[1])
+    dphix=w[0]
+    dphix=w[1]    
+    # thx=thx+dt*dphix
+    # thy=thy+dt*dphiy 
+    dx=v[0] #*np.cos(thx)
+    dy=v[1] #*np.sin(thy)
     b=np.sqrt(x**2+y**2)
     x=x+dt*dx
     y=y+dt*dy
+ 
     a=np.sqrt(dx**2+dy**2)
     [new_r,new_theta]=cart2pol(x,y)
     # new_theta=self.correct_for_wrap_rad(new_theta)
