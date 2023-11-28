@@ -156,9 +156,7 @@ class Microrobot_Env():
     b=np.sqrt(x**2+y**2)
     x=x+dt*dx
     y=y+dt*dy
-    print(x)
-    print(y)
- 
+
     a=np.sqrt(dx**2+dy**2)
     [new_r,new_theta]=cart2pol(x,y)
     # new_theta=self.correct_for_wrap_rad(new_theta)
@@ -181,6 +179,8 @@ class Microrobot_Env():
     phit=self.target_cart[2]
     d_target=np.sqrt((xt-x)**2+(yt-y)**2)
 
+    print(d_target)
+    print(dltg)
 
     loss = -1/2*abs(1e2*d_target)**2-1/2*abs(dltg)**2
     # print(d_target,dltg)
