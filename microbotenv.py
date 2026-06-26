@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
-"""MicrobotEnv"""
+"""MicrobotEnv - Corrected Version"""
+
 import numpy as np
 import gym
 from gym import spaces
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 import numpy.matlib
+
+from magneticfieldsim import MagneticFieldSim
+from microrobotmodel import MicroRobotModel
 
 def cart2pol(x, y):
     rho = np.sqrt(x**2 + y**2)
@@ -39,7 +43,7 @@ class Microrobot_Env(gym.Env):
         
         self.done = False
         self.reward = 0
-        self.dt = 0.01  # Added time step
+        self.dt = 0.01
         
         # Initialize microbot model
         self.microbot = MicroRobotModel([0, 0, 0], np.zeros((3, 3)), 0)
@@ -48,8 +52,9 @@ class Microrobot_Env(gym.Env):
         self.r2 = self.microbot.r2
         self.Rh = self.microbot.Rh
 
-        self.state = np.array([0, 0, 0, 0, 0, 0], dtype=np.float32)
-        self.next_state = np.array([0, 0, 0, 0, 0, 0], dtype=np.float32)
+        # Full state: [theta, theta_dot, x, y, vx, vy]
+        self.state = np.zeros(6, dtype=np.float32)
+        self.next_state = np.zeros(6, dtype=np.float32)
         self.start = 0
         self.theta = 0
         self.theta_dot = 0
@@ -59,6 +64,8 @@ class Microrobot_Env(gym.Env):
         
         self.x = self.rm * np.cos(self.theta)
         self.y = self.rm * np.sin(self.theta)
+        self.vx = 0
+        self.vy = 0
         self.P = np.array([self.x, self.y, 0, 1])
         
         xt, yt = pol2cart(self.rm, self.goal)
@@ -70,7 +77,13 @@ class Microrobot_Env(gym.Env):
         num_actions = 3
         
         self.action_space = spaces.Box(low=-1, high=1, shape=(num_actions,), dtype=np.float32)
-        self.observation_space = spaces.Box(low=-np.pi, high=np.pi, shape=(1,), dtype=np.float32)
+        
+        # Observation space matches state (6 values)
+        self.observation_space = spaces.Box(
+            low=np.array([-np.pi, -10, -0.1, -0.1, -1, -1], dtype=np.float32),
+            high=np.array([np.pi, 10, 0.1, 0.1, 1, 1], dtype=np.float32),
+            dtype=np.float32
+        )
         
         self.axs = 0
         self.testmode = 0
@@ -80,22 +93,22 @@ class Microrobot_Env(gym.Env):
         self.goal = self.start + self.goal_distance
         self.goal = self.correct_for_wrap_rad(self.goal)
         
-        x = self.rm * np.cos(self.state[0])
-        y = self.rm * np.sin(self.state[0])
+        theta = self.state[0]
+        x = self.rm * np.cos(theta)
+        y = self.rm * np.sin(theta)
         
         # Apply actions to generate currents
         mu1 = 30
         I = [
-            mu1 * action[0],  # Ix
-            mu1 * action[1],  # Iy  
-            mu1 * action[2],  # Iz
-            -mu1 * action[0],  # Ix2
-            -mu1 * action[1],  # Iy2
-            -mu1 * action[2]   # Iz2
+            mu1 * action[0],
+            mu1 * action[1],
+            mu1 * action[2],
+            -mu1 * action[0],
+            -mu1 * action[1],
+            -mu1 * action[2]
         ]
         
         self.info = I
-        theta = self.state[0]
         P = np.array([x, y, 0, 1])
         self.P = P
         
@@ -116,12 +129,17 @@ class Microrobot_Env(gym.Env):
         # Update position
         dx = v[0]
         dy = v[1]
+        self.vx = dx
+        self.vy = dy
         x = x + self.dt * dx
         y = y + self.dt * dy
         
         # Convert to polar coordinates
         new_r, new_theta = cart2pol(x, y)
         new_theta = self.correct_for_wrap_rad(new_theta)
+        
+        # Update theta_dot
+        self.theta_dot = (new_theta - theta) / self.dt
         
         # Calculate reward
         xt, yt, _ = self.target_cart
@@ -139,9 +157,9 @@ class Microrobot_Env(gym.Env):
             self.reward -= 1
             self.done = False
         
-        # Update state
+        # Update full state
         self.theta = new_theta
-        self.next_state = np.array([new_theta])
+        self.next_state = np.array([new_theta, self.theta_dot, x, y, self.vx, self.vy], dtype=np.float32)
         self.state = self.next_state
         
         self.path.append([x, y, 0])
@@ -154,14 +172,21 @@ class Microrobot_Env(gym.Env):
         self.reward = 0
         self.start = np.random.uniform(0, 2 * np.pi)
         self.theta = self.start
+        self.theta_dot = 0
         self.goal = self.start + self.goal_distance
+        self.goal = self.correct_for_wrap_rad(self.goal)
         
         xt, yt = pol2cart(self.rm, self.goal)
         self.target_cart = [xt, yt, 0]
         
         x, y = pol2cart(self.rm, self.start)
         self.start_cart = [x, y, 0]
-        self.state = np.array([self.theta])
+        self.x = x
+        self.y = y
+        self.vx = 0
+        self.vy = 0
+        
+        self.state = np.array([self.theta, self.theta_dot, x, y, self.vx, self.vy], dtype=np.float32)
         self.path = [[x, y, 0]]
         self.time = 0
         
@@ -171,6 +196,7 @@ class Microrobot_Env(gym.Env):
         self.done = False
         self.reward = 0
         self.start = 0
+        self.theta_dot = 0
         self.goal = self.start + self.goal_distance
         self.goal = self.correct_for_wrap_rad(self.goal)
         self.theta = self.start
@@ -180,7 +206,12 @@ class Microrobot_Env(gym.Env):
         
         x, y = pol2cart(self.rm, self.start)
         self.start_cart = [x, y, 0]
-        self.state = np.array([self.theta])
+        self.x = x
+        self.y = y
+        self.vx = 0
+        self.vy = 0
+        
+        self.state = np.array([self.theta, self.theta_dot, x, y, self.vx, self.vy], dtype=np.float32)
         self.path = [[x, y, 0]]
         self.time = 0
         
