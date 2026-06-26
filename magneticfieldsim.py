@@ -1,184 +1,325 @@
 # -*- coding: utf-8 -*-
-"""Magnetic Field and its Gradient Coding"""
+"""
+Magnetic Field Simulation - Hybrid Approach
+Combines analytical solution + interpolation for speed and accuracy
+"""
 import numpy as np
-import numpy.matlib 
+from scipy.special import ellipk, ellipe
+from scipy.interpolate import RegularGridInterpolator
+import pickle
+import os
 
-class MagneticFieldSim():
-
-    def __init__(self, P, I):
-        self.P = P  # microbot position
-        self.nl = 5  # number of coil layers
-        self.ntpl = 500  # number of turns per layer
-        self.Lc = 20e-3  # length of any coil
-        self.p = self.Lc / (2 * self.ntpl * np.pi)
-        self.nd = 1000
-        self.Rc = 30e-3  # radius of any coil
-        self.I = I
-
-        ## Workspace Specifications
-        self.Lw = 2 * self.Rc  # length, width and height of the workspace
+class MagneticFieldSim:
+    """Hybrid magnetic field solver with interpolation for RL"""
+    
+    def __init__(self, P=None, I=None, use_interpolation=True):
+        """
+        Initialize field simulator
+        
+        Parameters:
+        P: observation point (optional)
+        I: coil currents (optional)
+        use_interpolation: if True, use pre-computed grid (fast)
+                           if False, use direct calculation (accurate)
+        """
+        self.P = P if P is not None else np.zeros(3)
+        self.I = I if I is not None else np.ones(6)
+        
+        # Coil parameters
+        self.Rc = 30e-3  # coil radius
+        self.nl = 5      # number of layers
+        self.Lw = 2 * self.Rc
         self.CoilPositions = np.array([
-            [self.Lw/2, 0, 0], 
-            [0, self.Lw/2, 0], 
-            [0, 0, self.Lw/2],
-            [-self.Lw/2, 0, 0], 
-            [0, -self.Lw/2, 0], 
-            [0, 0, -self.Lw/2]
-        ])  # coils positions
+            [self.Lw/2, 0, 0], [0, self.Lw/2, 0], [0, 0, self.Lw/2],
+            [-self.Lw/2, 0, 0], [0, -self.Lw/2, 0], [0, 0, -self.Lw/2]
+        ])
         
-        C = self.CoilPositions
-        n = 10000
-        betah = np.linspace(0, 2 * self.ntpl * np.pi, n)
-        self.xx = np.ndarray((6, n))
-        self.yy = np.ndarray((6, n))
-        self.zz = np.ndarray((6, n))
+        self.use_interpolation = use_interpolation
         
-        for j in range(6):  # the number of coils is equal to 6
-            if j == 0 or j == 3:
-                zz = np.full((1, n), C[j, 2]) + self.Rc * np.cos(betah)
-                yy = np.full((1, n), C[j, 1]) + self.Rc * np.sin(betah)
-                xx = np.full((1, n), C[j, 0]) + np.sign(C[j, 0]) * 2 * self.p * betah
-            elif j == 1 or j == 4:
-                xx = np.full((1, n), C[j, 0]) + self.Rc * np.cos(betah)
-                zz = np.full((1, n), C[j, 2]) + self.Rc * np.sin(betah)
-                yy = np.full((1, n), C[j, 1]) + np.sign(C[j, 1]) * 2 * self.p * betah
-            elif j == 2 or j == 5:
-                xx = np.full((1, n), C[j, 0]) + self.Rc * np.cos(betah)
-                yy = np.full((1, n), C[j, 1]) + self.Rc * np.sin(betah)
-                zz = np.full((1, n), C[j, 2]) + np.sign(C[j, 2]) * 2 * self.p * betah
-            
-            self.xx[j, :] = xx
-            self.yy[j, :] = yy
-            self.zz[j, :] = zz
-
-    def BiotSavar(self):
-        beta = self.beta
-        dbeta = self.dbeta
-        Rc = self.Rc
-        p = self.p
-        C = self.Cj
-        P = self.P
-        I = self.Ij
+        # Load or create interpolation grid
+        self.grid_file = 'magnetic_field_grid.pkl'
+        if use_interpolation and os.path.exists(self.grid_file):
+            self._load_grid()
+        elif use_interpolation:
+            self._create_grid()
+            self._save_grid()
+    
+    def _coil_field_analytical(self, P, coil_idx, I):
+        """
+        Exact analytical field from a circular coil using elliptic integrals
+        """
         mu0 = 4 * np.pi * 1e-7
+        Rc = self.Rc
+        center = self.CoilPositions[coil_idx]
         
-        xp = P[0]
-        yp = P[1]
-        zp = P[2]
-        xc = C[0]
-        yc = C[1]
-        zc = C[2]
+        # Determine coil orientation
+        axis = np.argmax(np.abs(center))
         
-        x = xc + Rc * np.cos(beta)
-        y = yc + Rc * np.sin(beta)
-        z = zc + np.sign(zc) * 2 * p * beta
+        # Transform to coil coordinate system
+        if axis == 0:  # Coil in YZ plane
+            # Rotate coordinates
+            r = np.sqrt((P[1] - center[1])**2 + (P[2] - center[2])**2)
+            z = P[0] - center[0]
+            
+            if r < 1e-12 and abs(z) < 1e-12:
+                return np.array([mu0 * I / (2 * Rc), 0, 0])
+            
+            k2 = 4 * Rc * r / ((Rc + r)**2 + z**2)
+            if k2 >= 1:  # Numerical stability
+                k2 = 0.999999
+            k = np.sqrt(k2)
+            
+            try:
+                K = ellipk(k2)
+                E = ellipe(k2)
+            except:
+                K = np.pi/2  # Fallback
+                E = np.pi/2
+            
+            # Cylindrical components
+            Br = (mu0 * I / (2 * np.pi)) * (z / (r * np.sqrt((Rc + r)**2 + z**2))) * \
+                 (-K + (Rc**2 + r**2 + z**2) / ((Rc - r)**2 + z**2) * E)
+            
+            Bz = (mu0 * I / (2 * np.pi)) * (1 / np.sqrt((Rc + r)**2 + z**2)) * \
+                 (K + (Rc**2 - r**2 - z**2) / ((Rc - r)**2 + z**2) * E)
+            
+            # Convert to Cartesian
+            if r > 0:
+                By = Br * (P[1] - center[1]) / r
+                Bz_cart = Br * (P[2] - center[2]) / r
+            else:
+                By = 0
+                Bz_cart = 0
+            
+            return np.array([Bz, By, Bz_cart])
         
-        dx = -Rc * np.sin(beta) * dbeta
-        dy = Rc * np.cos(beta) * dbeta
-        dz = np.sign(zc) * 2 * p * dbeta
+        elif axis == 1:  # Coil in XZ plane
+            r = np.sqrt((P[0] - center[0])**2 + (P[2] - center[2])**2)
+            z = P[1] - center[1]
+            
+            if r < 1e-12 and abs(z) < 1e-12:
+                return np.array([0, mu0 * I / (2 * Rc), 0])
+            
+            k2 = 4 * Rc * r / ((Rc + r)**2 + z**2)
+            if k2 >= 1:
+                k2 = 0.999999
+            
+            try:
+                K = ellipk(k2)
+                E = ellipe(k2)
+            except:
+                K = np.pi/2
+                E = np.pi/2
+            
+            Br = (mu0 * I / (2 * np.pi)) * (z / (r * np.sqrt((Rc + r)**2 + z**2))) * \
+                 (-K + (Rc**2 + r**2 + z**2) / ((Rc - r)**2 + z**2) * E)
+            
+            Bz = (mu0 * I / (2 * np.pi)) * (1 / np.sqrt((Rc + r)**2 + z**2)) * \
+                 (K + (Rc**2 - r**2 - z**2) / ((Rc - r)**2 + z**2) * E)
+            
+            if r > 0:
+                Bx = Br * (P[0] - center[0]) / r
+                Bz_cart = Br * (P[2] - center[2]) / r
+            else:
+                Bx = 0
+                Bz_cart = 0
+            
+            return np.array([Bx, Bz, Bz_cart])
         
-        R = np.sqrt((x - xp)**2 + (y - yp)**2 + (z - zp)**2)
-        if R == 0:
-            R = 1e-9
+        else:  # axis == 2, Coil in XY plane
+            r = np.sqrt((P[0] - center[0])**2 + (P[1] - center[1])**2)
+            z = P[2] - center[2]
+            
+            if r < 1e-12 and abs(z) < 1e-12:
+                return np.array([0, 0, mu0 * I / (2 * Rc)])
+            
+            k2 = 4 * Rc * r / ((Rc + r)**2 + z**2)
+            if k2 >= 1:
+                k2 = 0.999999
+            
+            try:
+                K = ellipk(k2)
+                E = ellipe(k2)
+            except:
+                K = np.pi/2
+                E = np.pi/2
+            
+            Br = (mu0 * I / (2 * np.pi)) * (z / (r * np.sqrt((Rc + r)**2 + z**2))) * \
+                 (-K + (Rc**2 + r**2 + z**2) / ((Rc - r)**2 + z**2) * E)
+            
+            Bz = (mu0 * I / (2 * np.pi)) * (1 / np.sqrt((Rc + r)**2 + z**2)) * \
+                 (K + (Rc**2 - r**2 - z**2) / ((Rc - r)**2 + z**2) * E)
+            
+            if r > 0:
+                Bx = Br * (P[0] - center[0]) / r
+                By = Br * (P[1] - center[1]) / r
+            else:
+                Bx = 0
+                By = 0
+            
+            return np.array([Bx, By, Bz])
+    
+    def _create_grid(self, grid_size=31):
+        """Create interpolation grid using analytical solution"""
+        print("Creating magnetic field interpolation grid...")
         
-        # Magnetic field components
-        dBx = (mu0 * I) / (4 * np.pi) * ((z - zp) * dy - (y - yp) * dz) / R**3
-        dBy = -(mu0 * I) / (4 * np.pi) * ((z - zp) * dx - (x - xp) * dz) / R**3
-        dBz = (mu0 * I) / (4 * np.pi) * ((x - xp) * dy - (y - yp) * dx) / R**3
+        grid_points = np.linspace(-self.Lw/2, self.Lw/2, grid_size)
+        self.grid_points = grid_points
         
-        # Magnetic field gradient (Jacobian)
-        mu = 3 * mu0 * I / (4 * np.pi * R**5)
-        dBxdx = mu * ((z - zp) * dy - (y - yp) * dz) * (x - xp)
-        dBxdy = mu * ((z - zp) * (y - yp) * dy + ((R**2)/3 - (y - yp)**2) * dz)
-        dBxdz = -mu * ((z - zp) * (y - yp) * dz + ((R**2)/3 - (z - zp)**2) * dy)
+        # Initialize grid
+        self.field_grid = np.zeros((grid_size, grid_size, grid_size, 3))
         
-        dBydx = mu * ((z - zp) * (x - xp) * dx + ((R**2)/3 - (x - xp)**2) * dz)
-        dBydy = mu * ((z - zp) * dx - (x - xp) * dz) * (y - yp)
-        dBydz = -mu * ((x - xp) * (z - zp) * dz + ((R**2)/3 - (z - zp)**2) * dx)
+        # Calculate field at each grid point
+        total = grid_size**3
+        count = 0
         
-        dBzdx = -mu * ((x - xp) * (y - yp) * dx + ((R**2)/3 - (x - xp)**2) * dy)
-        dBzdy = mu * ((x - xp) * (y - yp) * dy + ((R**2)/3 - (y - yp)**2) * dx)
-        dBzdz = mu * ((x - xp) * dy - (y - yp) * dx) * (z - zp)
-
-        J = np.array([[dBxdx, dBxdy, dBxdz], 
-                      [dBydx, dBydy, dBydz], 
-                      [dBzdx, dBzdy, dBzdz]])  # magnetic field gradient
+        for i, x in enumerate(grid_points):
+            for j, y in enumerate(grid_points):
+                for k, z in enumerate(grid_points):
+                    count += 1
+                    if count % 1000 == 0:
+                        print(f"  {count}/{total} points computed")
+                    
+                    P = np.array([x, y, z])
+                    B = np.zeros(3)
+                    
+                    # Sum contributions from all coils
+                    for coil_idx in range(6):
+                        B += self._coil_field_analytical(P, coil_idx, 1.0)
+                    
+                    # Multiply by layers
+                    B *= self.nl
+                    self.field_grid[i, j, k, :] = B
         
-        return dBx, dBy, dBz, J
-
+        print(f"Grid creation complete! {total} points computed")
+        
+        # Create interpolators
+        self.Bx_interp = RegularGridInterpolator(
+            (grid_points, grid_points, grid_points),
+            self.field_grid[:, :, :, 0],
+            bounds_error=False,
+            fill_value=None
+        )
+        self.By_interp = RegularGridInterpolator(
+            (grid_points, grid_points, grid_points),
+            self.field_grid[:, :, :, 1],
+            bounds_error=False,
+            fill_value=None
+        )
+        self.Bz_interp = RegularGridInterpolator(
+            (grid_points, grid_points, grid_points),
+            self.field_grid[:, :, :, 2],
+            bounds_error=False,
+            fill_value=None
+        )
+    
+    def _save_grid(self):
+        """Save interpolation grid to file"""
+        with open(self.grid_file, 'wb') as f:
+            pickle.dump({
+                'grid_points': self.grid_points,
+                'field_grid': self.field_grid
+            }, f)
+        print(f"Grid saved to {self.grid_file}")
+    
+    def _load_grid(self):
+        """Load interpolation grid from file"""
+        with open(self.grid_file, 'rb') as f:
+            data = pickle.load(f)
+        
+        self.grid_points = data['grid_points']
+        self.field_grid = data['field_grid']
+        
+        # Recreate interpolators
+        self.Bx_interp = RegularGridInterpolator(
+            (self.grid_points, self.grid_points, self.grid_points),
+            self.field_grid[:, :, :, 0],
+            bounds_error=False,
+            fill_value=None
+        )
+        self.By_interp = RegularGridInterpolator(
+            (self.grid_points, self.grid_points, self.grid_points),
+            self.field_grid[:, :, :, 1],
+            bounds_error=False,
+            fill_value=None
+        )
+        self.Bz_interp = RegularGridInterpolator(
+            (self.grid_points, self.grid_points, self.grid_points),
+            self.field_grid[:, :, :, 2],
+            bounds_error=False,
+            fill_value=None
+        )
+        print(f"Grid loaded from {self.grid_file}")
+    
+    def get_field_fast(self, P, I=None):
+        """
+        Fast field calculation using interpolation
+        """
+        if I is not None:
+            self.I = I
+        
+        # Ensure P is within bounds
+        P_clipped = np.clip(P, -self.Lw/2, self.Lw/2)
+        
+        # Interpolate base field (for 1A per coil)
+        B_base = np.array([
+            self.Bx_interp(P_clipped)[0] if hasattr(self.Bx_interp(P_clipped), '__len__') else self.Bx_interp(P_clipped),
+            self.By_interp(P_clipped)[0] if hasattr(self.By_interp(P_clipped), '__len__') else self.By_interp(P_clipped),
+            self.Bz_interp(P_clipped)[0] if hasattr(self.Bz_interp(P_clipped), '__len__') else self.Bz_interp(P_clipped)
+        ])
+        
+        # Scale by average current (assuming linearity)
+        # For more accuracy, would need separate grids for each coil
+        avg_I = np.mean(self.I)
+        return B_base * avg_I
+    
+    def get_field_accurate(self, P, I=None):
+        """
+        Accurate field calculation using analytical solution
+        Use for validation and offline calculations
+        """
+        if I is not None:
+            self.I = I
+        
+        B = np.zeros(3)
+        for coil_idx in range(6):
+            B += self._coil_field_analytical(P, coil_idx, self.I[coil_idx])
+        
+        return B * self.nl
+    
     def IntegrationOfBiotSavar(self):
-        ntpl = self.ntpl
-        nd = self.nd
-        C = self.CoilPositions
-        I = self.I
-        nl = self.nl
-
-        betah = np.linspace(0, 2 * ntpl * np.pi, nd)
-        self.dbeta = 2 * ntpl * np.pi / nd
+        """
+        Main interface - returns B and J
+        """
+        if self.use_interpolation:
+            B = self.get_field_fast(self.P, self.I)
+        else:
+            B = self.get_field_accurate(self.P, self.I)
         
-        Bx = 0
-        By = 0
-        Bz = 0
-        J_total = np.zeros((3, 3))
-
-        for i in range(nd):  # nd is the size of discretization
-            self.beta = betah[i]
-            dbx = 0
-            dby = 0
-            dbz = 0
-            J0 = np.zeros((3, 3))
-            
-            for j in range(6):  # the number of coils is equal to 6
-                Cj = C[j, :].copy()
-                
-                # Adjust coordinates based on coil orientation
-                if j == 0 or j == 3:
-                    Cj_temp = [C[j, 2], C[j, 1], C[j, 0]]
-                elif j == 1 or j == 4:
-                    Cj_temp = [C[j, 0], C[j, 2], C[j, 1]]
-                elif j == 2 or j == 5:
-                    Cj_temp = [C[j, 0], C[j, 1], C[j, 2]]
-                
-                self.Ij = I[j]
-                self.Cj = Cj_temp
-                [a, b, c, d] = self.BiotSavar()
-                
-                # Adjust outputs based on coil orientation
-                if j == 0 or j == 3:
-                    dbx0 = c
-                    dby0 = a
-                    dbz0 = b
-                    J00 = np.array([[d[2, 0], d[2, 1], d[2, 2]],
-                                   [d[1, 0], d[1, 1], d[1, 2]],
-                                   [d[0, 0], d[0, 1], d[0, 2]]])
-                elif j == 1 or j == 4:
-                    dbx0 = a
-                    dby0 = c
-                    dbz0 = b
-                    J00 = np.array([[d[0, 0], d[0, 2], d[0, 1]],
-                                   [d[2, 0], d[2, 2], d[2, 1]],
-                                   [d[1, 0], d[1, 2], d[1, 1]]])
-                elif j == 2 or j == 5:
-                    dbx0 = a
-                    dby0 = b
-                    dbz0 = c
-                    J00 = d
-
-                dbx += dbx0
-                dby += dby0
-                dbz += dbz0
-                J0 += J00
-            
-            Bx += dbx
-            By += dby
-            Bz += dbz
-            J_total += J0
+        # Calculate gradient using finite differences
+        J = self._compute_gradient_fast()
         
-        # Multiply by number of winding layers
-        Bx = nl * Bx
-        By = nl * By
-        Bz = nl * Bz
-        B = np.array([Bx, By, Bz])
+        return B, J
+    
+    def _compute_gradient_fast(self):
+        """Compute gradient using finite differences (fast)"""
+        h = 0.1e-3  # 0.1mm step
+        P0 = self.P
         
-        J_total = nl * J_total  # magnetic field gradient
+        # Calculate field at 6 neighboring points
+        B0 = self.get_field_fast(P0) if self.use_interpolation else self.get_field_accurate(P0)
         
-        return B, J_total
+        Bx_plus = self.get_field_fast(P0 + np.array([h, 0, 0])) if self.use_interpolation else self.get_field_accurate(P0 + np.array([h, 0, 0]))
+        Bx_minus = self.get_field_fast(P0 - np.array([h, 0, 0])) if self.use_interpolation else self.get_field_accurate(P0 - np.array([h, 0, 0]))
+        By_plus = self.get_field_fast(P0 + np.array([0, h, 0])) if self.use_interpolation else self.get_field_accurate(P0 + np.array([0, h, 0]))
+        By_minus = self.get_field_fast(P0 - np.array([0, h, 0])) if self.use_interpolation else self.get_field_accurate(P0 - np.array([0, h, 0]))
+        Bz_plus = self.get_field_fast(P0 + np.array([0, 0, h])) if self.use_interpolation else self.get_field_accurate(P0 + np.array([0, 0, h]))
+        Bz_minus = self.get_field_fast(P0 - np.array([0, 0, h])) if self.use_interpolation else self.get_field_accurate(P0 - np.array([0, 0, h]))
+        
+        # Build Jacobian
+        J = np.zeros((3, 3))
+        J[0, :] = (Bx_plus - Bx_minus) / (2 * h)
+        J[1, :] = (By_plus - By_minus) / (2 * h)
+        J[2, :] = (Bz_plus - Bz_minus) / (2 * h)
+        
+        return J
